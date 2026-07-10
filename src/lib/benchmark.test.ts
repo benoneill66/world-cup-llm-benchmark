@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { buildPrompt, evaluateRun, settlePrediction, validatePredictions } from './benchmark';
+import { aggregateModelFamilies, aggregateModels, buildPrompt, evaluateRun, settlePrediction, validatePredictions } from './benchmark';
 import type { EvaluationRun, Match } from '../types';
 import dataset from '../data/matches.json';
 
@@ -24,29 +24,28 @@ describe('settlement', () => {
   });
 
   it('aggregates accuracy, ROI, and P&L', () => {
-    const run: EvaluationRun = { id: 'run', model: 'test', mode: 'blind', oddsSource: 'bet365', createdAt: '', predictions: [{ matchId: match.id, outcome: 'H' }] };
+    const run: EvaluationRun = { id: 'run', model: 'test', oddsSource: 'bet365', createdAt: '', predictions: [{ matchId: match.id, outcome: 'H' }] };
     expect(evaluateRun(run, [match])).toMatchObject({ matches: 1, correct: 1, accuracy: 1, totalPnl: 0.42, roi: 0.42 });
   });
 });
 
 describe('benchmark inputs', () => {
   it('rejects duplicate or invalid predictions', () => {
-    expect(() => validatePredictions([{ matchId: match.id, outcome: 'X' }], [match])).toThrow('H, D, or A');
-    expect(() => validatePredictions([{ matchId: match.id, outcome: 'H' }, { matchId: match.id, outcome: 'D' }], [match])).toThrow('Duplicate');
+    expect(() => validatePredictions([{ matchId: match.id, outcome: 'X' }], [match])).toThrow('WIN, DRAW, or LOSS');
+    expect(validatePredictions([{ matchId: match.id, outcome: 'WIN' }], [match])).toEqual([{ matchId: match.id, outcome: 'H' }]);
+    expect(validatePredictions([{ matchId: match.id, outcome: 'LOSS' }], [match])).toEqual([{ matchId: match.id, outcome: 'A' }]);
+    expect(() => validatePredictions([{ matchId: match.id, outcome: 'WIN' }, { matchId: match.id, outcome: 'DRAW' }], [match])).toThrow('Duplicate');
   });
 
-  it('does not leak outcomes or odds in blind prompts', () => {
-    const prompt = buildPrompt([match], 'blind', 'bet365');
+  it('always includes odds without leaking the actual result', () => {
+    const prompt = buildPrompt([match], 'bet365');
+    expect(prompt).toContain('Do not browse the web');
+    expect(prompt).toContain('Do not look up or reveal actual match results');
+    expect(prompt).toContain('before 11 June 2026');
     expect(prompt).not.toContain('homeGoals');
-    expect(prompt).not.toContain('closingOdds');
-    expect(prompt).not.toContain('1.42');
-  });
-
-  it('includes the selected close in odds-visible prompts without results', () => {
-    const prompt = buildPrompt([match], 'odds-visible', 'bet365');
     expect(prompt).toContain('closingOdds');
     expect(prompt).toContain('1.42');
-    expect(prompt).not.toContain('homeGoals');
+    expect(prompt).toContain('WIN, DRAW, or LOSS');
   });
 });
 
@@ -69,5 +68,37 @@ describe('locked 2026 dataset', () => {
         expect(line.away).toBeGreaterThan(1);
       }
     }
+  });
+});
+
+describe('model comparison', () => {
+  it('aggregates repeated runs by model', () => {
+    const first: EvaluationRun = { id: 'a', model: 'Model A', reasoningEffort: 'low', oddsSource: 'bet365', createdAt: '', predictions: [{ matchId: match.id, outcome: 'H' }] };
+    const second: EvaluationRun = { ...first, id: 'b', predictions: [{ matchId: match.id, outcome: 'D' }] };
+    const [summary] = aggregateModels([first, second], [match]);
+    expect(summary).toMatchObject({ model: 'Model A', reasoningEffort: 'low', runs: 2, predictions: 2, bestRoi: 0.42, bestRunId: 'a' });
+    expect(summary.averageRoi).toBeCloseTo(-0.29);
+  });
+
+  it('separates reasoning levels for the same model', () => {
+    const low: EvaluationRun = { id: 'low', model: 'Model A', reasoningEffort: 'low', oddsSource: 'bet365', createdAt: '', predictions: [{ matchId: match.id, outcome: 'H' }] };
+    const high: EvaluationRun = { ...low, id: 'high', reasoningEffort: 'high', predictions: [{ matchId: match.id, outcome: 'D' }] };
+    const summaries = aggregateModels([low, high], [match]);
+    expect(summaries).toHaveLength(2);
+    expect(summaries.map((item) => `${item.model}/${item.reasoningEffort}`).sort()).toEqual(['Model A/high', 'Model A/low']);
+  });
+
+  it('groups reasoning levels under one model family', () => {
+    const low: EvaluationRun = { id: 'low', model: 'Model A', reasoningEffort: 'low', oddsSource: 'bet365', createdAt: '', predictions: [{ matchId: match.id, outcome: 'H' }] };
+    const high: EvaluationRun = { ...low, id: 'high', reasoningEffort: 'high', predictions: [{ matchId: match.id, outcome: 'D' }] };
+    const other: EvaluationRun = { ...low, id: 'other', model: 'Model B', reasoningEffort: 'low', predictions: [{ matchId: match.id, outcome: 'H' }] };
+    const families = aggregateModelFamilies([low, high, other], [match]);
+    expect(families.map((item) => item.model).sort()).toEqual(['Model A', 'Model B']);
+    const familyA = families.find((item) => item.model === 'Model A')!;
+    expect(familyA.runs).toBe(2);
+    expect(familyA.reasoningLevels.map((level) => level.reasoningEffort).sort()).toEqual(['high', 'low']);
+    // best-performing reasoning level is listed first
+    expect(familyA.reasoningLevels[0].reasoningEffort).toBe('low');
+    expect(familyA.bestRoi).toBeCloseTo(0.42);
   });
 });

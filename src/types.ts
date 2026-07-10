@@ -1,5 +1,4 @@
 export type Outcome = 'H' | 'D' | 'A';
-export type EvaluationMode = 'blind' | 'odds-visible';
 export type OddsSource = 'bet365' | 'betfairExchange' | 'marketAverage' | 'marketBest';
 
 export interface OddsLine {
@@ -27,11 +26,37 @@ export interface Prediction {
 export interface EvaluationRun {
   id: string;
   model: string;
-  mode: EvaluationMode;
   oddsSource: OddsSource;
   createdAt: string;
   predictions: Prediction[];
   notes?: string;
+  modelVersion?: string;
+  reasoningEffort?: string;
+  promptVersion?: string;
+  publisher?: string;
+  publishedAt?: string;
+}
+
+export interface ModelSummary {
+  model: string;
+  reasoningEffort: string;
+  runs: number;
+  predictions: number;
+  averageAccuracy: number;
+  averageRoi: number;
+  bestRoi: number;
+  bestRunId: string;
+}
+
+export interface ModelFamilySummary {
+  model: string;
+  runs: number;
+  predictions: number;
+  averageAccuracy: number;
+  averageRoi: number;
+  bestRoi: number;
+  bestRunId: string;
+  reasoningLevels: ModelSummary[];
 }
 
 export interface SettledPrediction {

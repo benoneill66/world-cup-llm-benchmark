@@ -1,0 +1,3022 @@
+[
+  {
+    "id": "codex-gpt-5.4-mini-bet365-cli-v1",
+    "model": "GPT-5.4 Mini",
+    "modelVersion": "gpt-5.4-mini",
+    "reasoningEffort": "none",
+    "promptVersion": "closing-odds-cli-v1",
+    "oddsSource": "bet365",
+    "publisher": "Codex CLI 0.144.1",
+    "notes": "Ephemeral isolated directory; user config and rules ignored; read-only sandbox; no result data supplied; no search or tool calls.",
+    "createdAt": "2026-07-10T16:32:05.393Z",
+    "predictions": [
+      {
+        "matchId": "2026-A-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-A-02",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-B-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-D-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-B-02",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-C-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-C-02",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-D-02",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-E-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-F-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-E-02",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-F-02",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-H-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-G-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-H-02",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-G-02",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-I-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-I-02",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-J-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-J-02",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-K-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-L-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-L-02",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-K-02",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-A-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-B-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-B-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-A-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-D-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-C-03",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-C-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-D-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-F-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-E-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-E-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-F-04",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-H-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-G-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-H-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-G-04",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-J-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-I-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-I-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-J-04",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-K-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-L-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-L-04",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-K-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-B-05",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-B-06",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-C-05",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-C-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-A-05",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-A-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-E-05",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-E-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-F-05",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-F-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-D-05",
+        "outcome": "D"
+      },
+      {
+        "matchId": "2026-D-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-I-05",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-I-06",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-H-05",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-H-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-G-05",
+        "outcome": "D"
+      },
+      {
+        "matchId": "2026-G-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-L-05",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-L-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-K-05",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-K-06",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-J-05",
+        "outcome": "D"
+      },
+      {
+        "matchId": "2026-J-06",
+        "outcome": "A"
+      }
+    ],
+    "publishedAt": "2026-07-10T16:32:05.450Z"
+  },
+  {
+    "id": "codex-gpt-5.4-bet365-cli-v1",
+    "model": "GPT-5.4",
+    "modelVersion": "gpt-5.4",
+    "reasoningEffort": "none",
+    "promptVersion": "closing-odds-cli-v1",
+    "oddsSource": "bet365",
+    "publisher": "Codex CLI 0.144.1",
+    "notes": "Ephemeral isolated directory; user config and rules ignored; read-only sandbox; no result data supplied; no search or tool calls.",
+    "createdAt": "2026-07-10T16:32:05.460Z",
+    "predictions": [
+      {
+        "matchId": "2026-A-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-A-02",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-B-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-D-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-B-02",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-C-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-C-02",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-D-02",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-E-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-F-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-E-02",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-F-02",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-H-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-G-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-H-02",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-G-02",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-I-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-I-02",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-J-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-J-02",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-K-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-L-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-L-02",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-K-02",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-A-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-B-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-B-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-A-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-D-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-C-03",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-C-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-D-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-F-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-E-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-E-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-F-04",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-H-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-G-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-H-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-G-04",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-J-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-I-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-I-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-J-04",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-K-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-L-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-L-04",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-K-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-B-05",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-B-06",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-C-05",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-C-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-A-05",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-A-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-E-05",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-E-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-F-05",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-F-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-D-05",
+        "outcome": "D"
+      },
+      {
+        "matchId": "2026-D-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-I-05",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-I-06",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-H-05",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-H-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-G-05",
+        "outcome": "D"
+      },
+      {
+        "matchId": "2026-G-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-L-05",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-L-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-K-05",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-K-06",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-J-05",
+        "outcome": "D"
+      },
+      {
+        "matchId": "2026-J-06",
+        "outcome": "A"
+      }
+    ],
+    "publishedAt": "2026-07-10T16:32:05.461Z"
+  },
+  {
+    "id": "codex-gpt-5.5-bet365-cli-v1",
+    "model": "GPT-5.5",
+    "modelVersion": "gpt-5.5",
+    "reasoningEffort": "none",
+    "promptVersion": "closing-odds-cli-v1",
+    "oddsSource": "bet365",
+    "publisher": "Codex CLI 0.144.1",
+    "notes": "Ephemeral isolated directory; user config and rules ignored; read-only sandbox; no result data supplied; no search or tool calls.",
+    "createdAt": "2026-07-10T16:32:05.463Z",
+    "predictions": [
+      {
+        "matchId": "2026-A-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-A-02",
+        "outcome": "D"
+      },
+      {
+        "matchId": "2026-B-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-D-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-B-02",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-C-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-C-02",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-D-02",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-E-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-F-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-E-02",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-F-02",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-H-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-G-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-H-02",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-G-02",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-I-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-I-02",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-J-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-J-02",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-K-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-L-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-L-02",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-K-02",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-A-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-B-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-B-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-A-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-D-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-C-03",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-C-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-D-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-F-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-E-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-E-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-F-04",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-H-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-G-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-H-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-G-04",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-J-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-I-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-I-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-J-04",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-K-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-L-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-L-04",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-K-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-B-05",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-B-06",
+        "outcome": "D"
+      },
+      {
+        "matchId": "2026-C-05",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-C-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-A-05",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-A-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-E-05",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-E-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-F-05",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-F-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-D-05",
+        "outcome": "D"
+      },
+      {
+        "matchId": "2026-D-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-I-05",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-I-06",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-H-05",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-H-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-G-05",
+        "outcome": "D"
+      },
+      {
+        "matchId": "2026-G-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-L-05",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-L-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-K-05",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-K-06",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-J-05",
+        "outcome": "D"
+      },
+      {
+        "matchId": "2026-J-06",
+        "outcome": "A"
+      }
+    ],
+    "publishedAt": "2026-07-10T16:32:05.464Z"
+  },
+  {
+    "id": "codex-gpt-5.6-luna-bet365-cli-v1",
+    "model": "GPT-5.6 Luna",
+    "modelVersion": "gpt-5.6-luna",
+    "reasoningEffort": "none",
+    "promptVersion": "closing-odds-cli-v1",
+    "oddsSource": "bet365",
+    "publisher": "Codex CLI 0.144.1",
+    "notes": "Ephemeral isolated directory; user config and rules ignored; read-only sandbox; no result data supplied; no search or tool calls.",
+    "createdAt": "2026-07-10T16:32:05.465Z",
+    "predictions": [
+      {
+        "matchId": "2026-A-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-A-02",
+        "outcome": "D"
+      },
+      {
+        "matchId": "2026-B-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-D-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-B-02",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-C-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-C-02",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-D-02",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-E-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-F-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-E-02",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-F-02",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-H-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-G-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-H-02",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-G-02",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-I-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-I-02",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-J-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-J-02",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-K-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-L-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-L-02",
+        "outcome": "D"
+      },
+      {
+        "matchId": "2026-K-02",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-A-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-B-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-B-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-A-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-D-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-C-03",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-C-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-D-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-F-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-E-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-E-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-F-04",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-H-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-G-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-H-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-G-04",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-J-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-I-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-I-04",
+        "outcome": "D"
+      },
+      {
+        "matchId": "2026-J-04",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-K-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-L-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-L-04",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-K-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-B-05",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-B-06",
+        "outcome": "D"
+      },
+      {
+        "matchId": "2026-C-05",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-C-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-A-05",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-A-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-E-05",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-E-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-F-05",
+        "outcome": "D"
+      },
+      {
+        "matchId": "2026-F-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-D-05",
+        "outcome": "D"
+      },
+      {
+        "matchId": "2026-D-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-I-05",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-I-06",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-H-05",
+        "outcome": "D"
+      },
+      {
+        "matchId": "2026-H-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-G-05",
+        "outcome": "D"
+      },
+      {
+        "matchId": "2026-G-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-L-05",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-L-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-K-05",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-K-06",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-J-05",
+        "outcome": "D"
+      },
+      {
+        "matchId": "2026-J-06",
+        "outcome": "A"
+      }
+    ],
+    "publishedAt": "2026-07-10T16:32:05.466Z"
+  },
+  {
+    "id": "codex-gpt-5.6-sol-bet365-cli-v1",
+    "model": "GPT-5.6 Sol",
+    "modelVersion": "gpt-5.6-sol",
+    "reasoningEffort": "none",
+    "promptVersion": "closing-odds-cli-v1",
+    "oddsSource": "bet365",
+    "publisher": "Codex CLI 0.144.1",
+    "notes": "Ephemeral isolated directory; user config and rules ignored; read-only sandbox; no result data supplied; no search or tool calls.",
+    "createdAt": "2026-07-10T16:32:05.468Z",
+    "predictions": [
+      {
+        "matchId": "2026-A-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-A-02",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-B-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-D-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-B-02",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-C-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-C-02",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-D-02",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-E-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-F-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-E-02",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-F-02",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-H-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-G-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-H-02",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-G-02",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-I-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-I-02",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-J-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-J-02",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-K-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-L-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-L-02",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-K-02",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-A-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-B-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-B-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-A-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-D-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-C-03",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-C-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-D-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-F-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-E-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-E-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-F-04",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-H-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-G-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-H-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-G-04",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-J-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-I-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-I-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-J-04",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-K-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-L-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-L-04",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-K-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-B-05",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-B-06",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-C-05",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-C-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-A-05",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-A-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-E-05",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-E-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-F-05",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-F-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-D-05",
+        "outcome": "D"
+      },
+      {
+        "matchId": "2026-D-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-I-05",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-I-06",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-H-05",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-H-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-G-05",
+        "outcome": "D"
+      },
+      {
+        "matchId": "2026-G-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-L-05",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-L-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-K-05",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-K-06",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-J-05",
+        "outcome": "D"
+      },
+      {
+        "matchId": "2026-J-06",
+        "outcome": "A"
+      }
+    ],
+    "publishedAt": "2026-07-10T16:32:05.469Z"
+  },
+  {
+    "id": "codex-gpt-5.6-terra-bet365-cli-v1",
+    "model": "GPT-5.6 Terra",
+    "modelVersion": "gpt-5.6-terra",
+    "reasoningEffort": "none",
+    "promptVersion": "closing-odds-cli-v1",
+    "oddsSource": "bet365",
+    "publisher": "Codex CLI 0.144.1",
+    "notes": "Ephemeral isolated directory; user config and rules ignored; read-only sandbox; no result data supplied; no search or tool calls.",
+    "createdAt": "2026-07-10T16:32:05.470Z",
+    "predictions": [
+      {
+        "matchId": "2026-A-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-A-02",
+        "outcome": "D"
+      },
+      {
+        "matchId": "2026-B-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-D-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-B-02",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-C-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-C-02",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-D-02",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-E-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-F-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-E-02",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-F-02",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-H-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-G-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-H-02",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-G-02",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-I-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-I-02",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-J-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-J-02",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-K-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-L-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-L-02",
+        "outcome": "D"
+      },
+      {
+        "matchId": "2026-K-02",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-A-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-B-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-B-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-A-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-D-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-C-03",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-C-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-D-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-F-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-E-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-E-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-F-04",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-H-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-G-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-H-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-G-04",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-J-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-I-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-I-04",
+        "outcome": "D"
+      },
+      {
+        "matchId": "2026-J-04",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-K-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-L-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-L-04",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-K-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-B-05",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-B-06",
+        "outcome": "D"
+      },
+      {
+        "matchId": "2026-C-05",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-C-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-A-05",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-A-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-E-05",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-E-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-F-05",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-F-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-D-05",
+        "outcome": "D"
+      },
+      {
+        "matchId": "2026-D-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-I-05",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-I-06",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-H-05",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-H-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-G-05",
+        "outcome": "D"
+      },
+      {
+        "matchId": "2026-G-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-L-05",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-L-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-K-05",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-K-06",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-J-05",
+        "outcome": "D"
+      },
+      {
+        "matchId": "2026-J-06",
+        "outcome": "A"
+      }
+    ],
+    "publishedAt": "2026-07-10T16:32:05.471Z"
+  },
+  {
+    "id": "claude-haiku-bet365-cli-v1",
+    "model": "Claude Haiku",
+    "modelVersion": "claude-haiku-4-5-20251001",
+    "reasoningEffort": "low",
+    "promptVersion": "closing-odds-cli-v1",
+    "oddsSource": "bet365",
+    "publisher": "Claude Code 2.1.206",
+    "notes": "Isolated directory; safe mode; no session persistence; all tools disabled; empty strict MCP config; no result data supplied; telemetry confirmed zero web searches.",
+    "createdAt": "2026-07-10T16:32:05.473Z",
+    "predictions": [
+      {
+        "matchId": "2026-A-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-A-02",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-B-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-D-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-B-02",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-C-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-C-02",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-D-02",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-E-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-F-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-E-02",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-F-02",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-H-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-G-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-H-02",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-G-02",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-I-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-I-02",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-J-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-J-02",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-K-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-L-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-L-02",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-K-02",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-A-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-B-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-B-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-A-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-D-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-C-03",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-C-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-D-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-F-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-E-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-E-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-F-04",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-H-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-G-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-H-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-G-04",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-J-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-I-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-I-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-J-04",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-K-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-L-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-L-04",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-K-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-B-05",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-B-06",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-C-05",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-C-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-A-05",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-A-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-E-05",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-E-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-F-05",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-F-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-D-05",
+        "outcome": "D"
+      },
+      {
+        "matchId": "2026-D-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-I-05",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-I-06",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-H-05",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-H-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-G-05",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-G-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-L-05",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-L-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-K-05",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-K-06",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-J-05",
+        "outcome": "D"
+      },
+      {
+        "matchId": "2026-J-06",
+        "outcome": "A"
+      }
+    ],
+    "publishedAt": "2026-07-10T16:32:05.474Z"
+  },
+  {
+    "id": "claude-sonnet-bet365-cli-v1",
+    "model": "Claude Sonnet",
+    "modelVersion": "claude-sonnet-5",
+    "reasoningEffort": "low",
+    "promptVersion": "closing-odds-cli-v1",
+    "oddsSource": "bet365",
+    "publisher": "Claude Code 2.1.206",
+    "notes": "Isolated directory; safe mode; no session persistence; all tools disabled; empty strict MCP config; no result data supplied; telemetry confirmed zero web searches.",
+    "createdAt": "2026-07-10T16:32:05.475Z",
+    "predictions": [
+      {
+        "matchId": "2026-A-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-A-02",
+        "outcome": "D"
+      },
+      {
+        "matchId": "2026-B-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-D-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-B-02",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-C-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-C-02",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-D-02",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-E-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-F-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-E-02",
+        "outcome": "D"
+      },
+      {
+        "matchId": "2026-F-02",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-H-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-G-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-H-02",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-G-02",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-I-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-I-02",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-J-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-J-02",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-K-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-L-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-L-02",
+        "outcome": "D"
+      },
+      {
+        "matchId": "2026-K-02",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-A-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-B-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-B-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-A-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-D-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-C-03",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-C-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-D-04",
+        "outcome": "D"
+      },
+      {
+        "matchId": "2026-F-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-E-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-E-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-F-04",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-H-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-G-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-H-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-G-04",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-J-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-I-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-I-04",
+        "outcome": "D"
+      },
+      {
+        "matchId": "2026-J-04",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-K-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-L-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-L-04",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-K-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-B-05",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-B-06",
+        "outcome": "D"
+      },
+      {
+        "matchId": "2026-C-05",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-C-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-A-05",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-A-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-E-05",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-E-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-F-05",
+        "outcome": "D"
+      },
+      {
+        "matchId": "2026-F-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-D-05",
+        "outcome": "D"
+      },
+      {
+        "matchId": "2026-D-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-I-05",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-I-06",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-H-05",
+        "outcome": "D"
+      },
+      {
+        "matchId": "2026-H-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-G-05",
+        "outcome": "D"
+      },
+      {
+        "matchId": "2026-G-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-L-05",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-L-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-K-05",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-K-06",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-J-05",
+        "outcome": "D"
+      },
+      {
+        "matchId": "2026-J-06",
+        "outcome": "A"
+      }
+    ],
+    "publishedAt": "2026-07-10T16:32:05.477Z"
+  },
+  {
+    "id": "claude-opus-bet365-cli-v1",
+    "model": "Claude Opus",
+    "modelVersion": "claude-opus-4-8",
+    "reasoningEffort": "low",
+    "promptVersion": "closing-odds-cli-v1",
+    "oddsSource": "bet365",
+    "publisher": "Claude Code 2.1.206",
+    "notes": "Isolated directory; safe mode; no session persistence; all tools disabled; empty strict MCP config; no result data supplied; telemetry confirmed zero web searches.",
+    "createdAt": "2026-07-10T16:32:05.478Z",
+    "predictions": [
+      {
+        "matchId": "2026-A-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-A-02",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-B-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-D-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-B-02",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-C-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-C-02",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-D-02",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-E-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-F-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-E-02",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-F-02",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-H-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-G-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-H-02",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-G-02",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-I-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-I-02",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-J-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-J-02",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-K-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-L-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-L-02",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-K-02",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-A-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-B-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-B-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-A-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-D-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-C-03",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-C-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-D-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-F-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-E-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-E-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-F-04",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-H-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-G-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-H-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-G-04",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-J-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-I-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-I-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-J-04",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-K-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-L-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-L-04",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-K-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-B-05",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-B-06",
+        "outcome": "D"
+      },
+      {
+        "matchId": "2026-C-05",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-C-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-A-05",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-A-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-E-05",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-E-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-F-05",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-F-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-D-05",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-D-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-I-05",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-I-06",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-H-05",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-H-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-G-05",
+        "outcome": "D"
+      },
+      {
+        "matchId": "2026-G-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-L-05",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-L-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-K-05",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-K-06",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-J-05",
+        "outcome": "D"
+      },
+      {
+        "matchId": "2026-J-06",
+        "outcome": "A"
+      }
+    ],
+    "publishedAt": "2026-07-10T16:32:05.479Z"
+  },
+  {
+    "id": "claude-fable-bet365-cli-v1",
+    "model": "Claude Fable",
+    "modelVersion": "claude-fable-5",
+    "reasoningEffort": "low",
+    "promptVersion": "closing-odds-cli-v1",
+    "oddsSource": "bet365",
+    "publisher": "Claude Code 2.1.206",
+    "notes": "Isolated directory; safe mode; no session persistence; all tools disabled; empty strict MCP config; no result data supplied; telemetry confirmed zero web searches.",
+    "createdAt": "2026-07-10T16:32:05.482Z",
+    "predictions": [
+      {
+        "matchId": "2026-A-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-A-02",
+        "outcome": "D"
+      },
+      {
+        "matchId": "2026-B-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-D-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-B-02",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-C-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-C-02",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-D-02",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-E-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-F-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-E-02",
+        "outcome": "D"
+      },
+      {
+        "matchId": "2026-F-02",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-H-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-G-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-H-02",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-G-02",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-I-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-I-02",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-J-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-J-02",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-K-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-L-01",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-L-02",
+        "outcome": "D"
+      },
+      {
+        "matchId": "2026-K-02",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-A-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-B-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-B-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-A-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-D-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-C-03",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-C-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-D-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-F-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-E-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-E-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-F-04",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-H-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-G-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-H-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-G-04",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-J-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-I-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-I-04",
+        "outcome": "D"
+      },
+      {
+        "matchId": "2026-J-04",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-K-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-L-03",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-L-04",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-K-04",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-B-05",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-B-06",
+        "outcome": "D"
+      },
+      {
+        "matchId": "2026-C-05",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-C-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-A-05",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-A-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-E-05",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-E-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-F-05",
+        "outcome": "D"
+      },
+      {
+        "matchId": "2026-F-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-D-05",
+        "outcome": "D"
+      },
+      {
+        "matchId": "2026-D-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-I-05",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-I-06",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-H-05",
+        "outcome": "D"
+      },
+      {
+        "matchId": "2026-H-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-G-05",
+        "outcome": "D"
+      },
+      {
+        "matchId": "2026-G-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-L-05",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-L-06",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-K-05",
+        "outcome": "A"
+      },
+      {
+        "matchId": "2026-K-06",
+        "outcome": "H"
+      },
+      {
+        "matchId": "2026-J-05",
+        "outcome": "D"
+      },
+      {
+        "matchId": "2026-J-06",
+        "outcome": "A"
+      }
+    ],
+    "publishedAt": "2026-07-10T16:32:05.483Z"
+  }
+]

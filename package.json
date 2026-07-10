@@ -4,8 +4,9 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "concurrently -k -n web,api \"vite\" \"node --watch server/index.mjs\"",
     "build": "tsc -b && vite build",
+    "start": "node server/index.mjs",
     "test": "vitest run",
     "test:watch": "vitest",
     "preview": "vite preview"
@@ -15,13 +16,15 @@
     "vite": "latest",
     "typescript": "latest",
     "react": "latest",
-    "react-dom": "latest"
+    "react-dom": "latest",
+    "express": "latest"
   },
   "devDependencies": {
     "@testing-library/react": "latest",
     "@types/react": "latest",
     "@types/react-dom": "latest",
     "jsdom": "latest",
+    "concurrently": "latest",
     "vitest": "latest"
   }
 }
