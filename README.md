@@ -1,114 +1,91 @@
 # Touchline — 2026 World Cup LLM betting benchmark
 
-Touchline measures how well language models predict the **90-minute 1X2 result** of all 72 matches in the 2026 FIFA World Cup group stage. Every model receives fixtures plus one selected set of closing 1X2 prices, then chooses `WIN`, `DRAW`, or `LOSS` from the listed home team's perspective.
+Touchline measures how well language models **turn a profit betting** on the 72 group-stage matches of the 2026 FIFA World Cup. Rather than asking a model to predict results (which just rewards copying the betting favourite), it hands the model a **£100 bankroll** and asks it to **maximise profit** by finding value in the closing prices.
 
-Each prediction is settled as a £1 flat-stake bet at the chosen close. There are no exact-score predictions or exact-score markets.
+## The profit challenge
+
+Each model receives all 72 fixtures with four sets of closing 1X2 prices, and must return, per match:
+
+- a **bet** — back Home (`H`), Draw (`D`), Away (`A`), or `PASS`;
+- a **stake** — £0–£10, where **all stakes must sum to the full £100 bankroll**;
+- its own **probabilities** for H / D / A.
+
+Winning bets settle at the **best available price** across the four feeds (line shopping). A winning £s stake at decimal odds `o` returns `s × (o − 1)`; a losing bet loses the stake. Because the whole bankroll must be deployed (max £10 per match, so ≥10 positions), it is a **bankroll-allocation problem**: money on one match is money withheld from another, so the model must concentrate on its strongest value bets and pass on the rest.
+
+This design targets the failure mode of the naive version: with a fixed £1 forced bet and a "predict the result" prompt, every model just backs the favourite (~98% of the time) and there is no way to express conviction. Here, profit only comes from probability estimates that genuinely beat the market.
+
+## Metrics
+
+- **Net P&L / return on bankroll** — profit on the £100 (headline).
+- **Hit rate** and **average odds** — you can profit with a low hit rate if the winners pay enough.
+- **Brier score** — grades the model's own H/D/A probabilities (0 = perfect, 0.667 = uniform guess), measuring calibration independently of betting luck.
+- **Value bets** — placed bets the model itself judged +EV (its probability beat the implied price).
+
+A **flat-favourite baseline** (the £100 spread evenly across the best-priced favourite every match) is included as a clearly-labelled reference; beat it by finding value.
 
 ## Run it
 
 ```bash
 npm install
-npm run dev
-```
-
-Production and test checks:
-
-```bash
-npm test
-npm run build
+npm run dev      # web app + curator API
+npm test         # scoring, prompt, store, and UI tests
+npm run build    # static production build
 ```
 
 ## Evaluation workflow
 
-1. Open **Prompt lab** and choose which closing-odds feed to show the model.
-2. Copy or download the generated prompt and run it against an LLM in a clean session.
-3. Open **New evaluation**, record the model, version, and settlement line.
-4. Paste the returned JSON array, then import and settle it.
-5. Compare P&L, ROI, accuracy, cumulative returns, and every individual £1 bet on the dashboard.
+1. Open **Prompt lab**, copy or download the result-free profit prompt.
+2. Run it against an LLM in a clean, tool-free session (see *Experimental discipline*).
+3. Open **New evaluation**, paste the returned JSON array of wagers; it's scored instantly and stored locally in your browser.
+4. Compare P&L, ROI, hit rate, Brier, and the full wager ledger on the dashboard.
 
-The accepted response format is:
+Accepted response format:
 
 ```json
-[
-  { "matchId": "2026-A-01", "outcome": "WIN" },
-  { "matchId": "2026-A-02", "outcome": "DRAW" }
-]
+[{ "matchId": "2026-A-01", "bet": "A", "stake": 6.5, "probs": { "H": 0.30, "D": 0.28, "A": 0.42 } }]
 ```
 
-`WIN` means the listed home team wins, `DRAW` means the match is drawn, and `LOSS` means the home team loses. Partial runs are accepted for development, while complete benchmark comparisons should contain all 72 match IDs exactly once.
+Stakes are normalised to sum to £100 at scoring time (over-budget scaled down, under-budget scaled up, capped at £10/match), so a run is graded on exactly the same bankroll regardless of small arithmetic slips.
 
-The public site is **browse-only**: anyone can explore the published benchmark and generate the prompt, but nobody can publish results to it. Your own evaluations stay in your browser's `localStorage` — paste a model's answers to see how it would have scored, entirely privately. The closing-favourite strategy is included as a clearly labelled reference baseline; it is not presented as an LLM result.
+## Browse-only public site
 
-## Browsing and model comparison
+The deployed site is **browse-only**: anyone can explore published runs and copy the prompt, but nobody can publish to it. Your own evaluations stay in your browser. The catalogue is a JSON file committed to the repo (`src/data/published-runs.json`), bundled into the static build, so the public site needs no backend.
 
-- **Published runs** is the browseable experiment catalogue, with model and closing-line search and links into every bet ledger.
-- **Models** groups the published runs by **model family**. Each family shows its aggregate ROI and accuracy; selecting one drills into its **reasoning levels** (e.g. `low`, `medium`, `high`), and selecting a level lists every individual run beneath it.
-- **New evaluation** and **Prompt lab** let visitors reproduce the benchmark against their own model locally — no account, no publishing.
+- **Published runs** — the browseable catalogue of complete 72-match profit runs.
+- **Models** — groups runs by model family; drill into each reasoning level and its individual runs, ranked by net P&L.
+- The site deploys to **GitHub Pages** via `.github/workflows/deploy.yml` on every push to `main`.
 
-## Results storage
+## Curator server (optional, local only)
 
-Published results are a JSON file committed to the repo at [`src/data/published-runs.json`](src/data/published-runs.json). This single file is the source of truth: it is bundled into the static build (so the public site needs no backend) and is what the curator server reads and writes. To publish or amend a run, edit this file — directly, or via the local curator server below — and commit it.
+`server/` is a small Express service used only for curation, browse-only by default. Set `TOUCHLINE_ALLOW_PUBLISH=1` to enable writes (`POST /api/runs` otherwise returns `403`). It reads and writes the same committed `src/data/published-runs.json`.
 
-### Curator server (optional, local only)
+## Generating benchmark runs
 
-`server/` is a small Express service used only for curation. It is browse-only by default; set `TOUCHLINE_ALLOW_PUBLISH=1` to enable writes, then seed the catalogue with `scripts/publish-cli-results.mjs`.
+`scripts/run-profit-benchmark.mjs` runs models through the profit challenge in **fully isolated** conditions and validates their output; `scripts/publish-batch.mjs` appends validated runs to the catalogue.
 
-- `GET /api/health`
-- `GET /api/runs`
-- `GET /api/runs/:id`
-- `POST /api/runs` — returns `403` unless `TOUCHLINE_ALLOW_PUBLISH=1`
+```bash
+# 4 Claude models × {low,medium} reasoning × 5 runs, or filter to one cell:
+node scripts/run-profit-benchmark.mjs .profit-out 5 4 opus medium
+node scripts/publish-batch.mjs .profit-out/results.json
+```
 
-Writes go to `src/data/published-runs.json` atomically. The hosted public site never runs this server.
-
-## Deployment
-
-The site is a static single-page app deployed to **GitHub Pages** via `.github/workflows/deploy.yml` on every push to `main` (Vite uses a relative `base`, so it works from a project subpath). Because the catalogue is committed JSON, the deployed site is fully self-contained and read-only.
-
-### Isolated CLI benchmark runs
-
-`scripts/export-evaluation-prompt.mjs` emits the result-free 72-match fixture and odds pack used for isolated CLI evaluations. `scripts/prediction-output-schema.json` defines the required 72-pick structured response, and `scripts/publish-cli-results.mjs` validates and publishes completed Codex/Claude CLI batches. Published metadata includes the exact model version and reasoning-effort setting.
-
-## Settlement rules
-
-For a £1 stake at decimal odds `o`:
-
-- correct prediction: net P&L = `o − 1`
-- incorrect prediction: net P&L = `−1`
-
-All monetary settlement and cumulative balances are rounded to pennies. ROI is total net P&L divided by total stake. The benchmark always uses the result after 90 minutes, consistent with a standard football 1X2 market.
+Each run executes `claude -p` in a fresh ephemeral directory **outside the repo**, with all built-in tools disabled and an empty strict MCP config, so the model cannot read `src/data/matches.json` (which holds the actual results) or reach the web. Reasoning level is set via `MAX_THINKING_TOKENS` (low = 2000, medium = 10000), and telemetry is checked to confirm zero web searches on every run.
 
 ## Dataset and closing odds
 
-The locked snapshot at [`src/data/matches.json`](src/data/matches.json) contains 72 group-stage fixtures, their 90-minute outcomes, and four price feeds:
+The locked snapshot at [`src/data/matches.json`](src/data/matches.json) contains 72 group-stage fixtures, their 90-minute outcomes, and four price feeds (Bet365, Betfair Exchange, market average, best available) — source: [Football-Data.co.uk World Cup 2026 workbook](https://www.football-data.co.uk/WorldCup2026.xlsx). Scores are retained only to derive the authoritative `H`/`D`/`A` outcome; generated prompts never contain scores or results.
 
-- Bet365 closing 1X2
-- Betfair Exchange closing 1X2
-- average bookmaker closing 1X2
-- best available bookmaker closing 1X2
+## Experimental discipline
 
-Source: [Football-Data.co.uk World Cup 2026 workbook](https://www.football-data.co.uk/WorldCup2026.xlsx), retrieved 10 July 2026. Football-Data describes its `C`-labelled prices as closing odds in its [dataset notes](https://www.football-data.co.uk/downloadm.php). The workbook's `WorldCup2026` sheet was filtered to the first 72 chronological fixtures (11–28 June), and teams were assigned to Groups A–L from their six-match round-robin fixture sets.
-
-The raw score is retained only to derive the authoritative `H`/`D`/`A` outcome. Models are never asked to predict an exact score, and generated prompts never contain scores or outcomes.
+- Disable web search, browsing, retrieval, connectors, and code execution at the model/API level. The prompt forbids them, but prompt text alone cannot enforce tool access.
+- For a valid retrospective run, use a model snapshot with a knowledge cutoff before 11 June 2026 — a current model may already contain results in its training data.
+- Freeze the prompt and settings before comparing models, and record model version, reasoning effort, and run date.
+- Retrospective P&L is not evidence a strategy will remain profitable; closing lines are efficient and variance on longshots is high.
 
 ## Architecture
 
 - `src/data/matches.json` — locked match/result/odds snapshot
-- `src/lib/benchmark.ts` — prompt construction, input validation, and deterministic bet settlement
-- `src/lib/benchmark.test.ts` — leakage, validation, and accounting tests
-- `src/App.tsx` — run ingestion, prompt lab, leaderboard, charts, and bet ledger
-- `src/lib/storage.ts` — local evaluation persistence
-- `src/lib/api.ts` — published catalogue client
-- `server/app.mjs` — validated publication and browsing API
-- `server/store.mjs` — atomic published-run persistence
-
-To benchmark another tournament, supply the same `Match` shape defined in `src/types.ts`; the evaluation and dashboard layers do not contain tournament-specific settlement logic.
-
-## Experimental discipline
-
-- Freeze the prompt and model settings before comparing models.
-- Never expose the built app, source dataset, or dashboard to a model during an evaluation run.
-- Disable web search, browsing, retrieval, connectors, code execution, and other tools at the model/API level. The generated prompt explicitly prohibits using them, but prompt text alone cannot enforce tool access.
-- For a valid retrospective evaluation, use a model snapshot with a knowledge cutoff before 11 June 2026. A current model may already contain tournament results in its training data even when tools are disabled.
-- Record model version, run date, temperature, tools/search access, and prompt revision in the run notes.
-- Use the same closing-odds source when comparing models, or clearly report the selected source alongside the result.
-- Do not treat retrospective P&L as evidence that a strategy will remain profitable.
+- `src/lib/benchmark.ts` — profit prompt, wager validation, best-price settlement, bankroll fitting, and metrics
+- `src/App.tsx` — dashboard, leaderboard, wager ledger, model drill-down, prompt lab, importer
+- `server/` — browse-only curator API and atomic run store
+- `scripts/` — isolated run generation and batch publishing

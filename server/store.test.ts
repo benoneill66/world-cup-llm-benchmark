@@ -7,16 +7,18 @@ import { normalizePublishedRun, readRuns, validatePublishedRun, writeRuns } from
 
 const validIds = new Set(matches.map((match) => match.id));
 const completeRun = {
-  id: 'run-1', model: 'GPT-5', oddsSource: 'bet365', createdAt: new Date().toISOString(),
-  predictions: matches.map((match) => ({ matchId: match.id, outcome: 'WIN' })),
+  id: 'run-1', model: 'GPT-5', createdAt: new Date().toISOString(),
+  wagers: matches.map((match) => ({ matchId: match.id, bet: 'WIN', stake: 5, probs: { H: 2, D: 1, A: 1 } })),
 };
 
 describe('published run store', () => {
   it('requires a complete, unique benchmark before publishing', () => {
     expect(validatePublishedRun(completeRun, validIds)).toBeNull();
-    expect(normalizePublishedRun(completeRun).predictions[0].outcome).toBe('H');
-    expect(validatePublishedRun({ ...completeRun, predictions: completeRun.predictions.slice(1) }, validIds)).toContain('all 72');
-    expect(validatePublishedRun({ ...completeRun, predictions: completeRun.predictions.map((item, index) => index === 1 ? completeRun.predictions[0] : item) }, validIds)).toContain('Duplicate');
+    const normalized = normalizePublishedRun(completeRun);
+    expect(normalized.wagers[0].bet).toBe('H');
+    expect(normalized.wagers[0].probs.H).toBeCloseTo(0.5); // 2/(2+1+1)
+    expect(validatePublishedRun({ ...completeRun, wagers: completeRun.wagers.slice(1) }, validIds)).toContain('all 72');
+    expect(validatePublishedRun({ ...completeRun, wagers: completeRun.wagers.map((item, index) => index === 1 ? completeRun.wagers[0] : item) }, validIds)).toContain('Duplicate');
   });
 
   it('writes and reads the run catalogue atomically', async () => {

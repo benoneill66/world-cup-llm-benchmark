@@ -1,6 +1,6 @@
 import type { EvaluationRun } from '../types';
 
-const KEY = 'touchline-evaluation-runs-v1';
+const KEY = 'touchline-evaluation-runs-v2';
 
 export function loadRuns(): EvaluationRun[] {
   try {

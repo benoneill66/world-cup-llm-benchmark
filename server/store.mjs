@@ -18,18 +18,27 @@ export async function writeRuns(storePath, runs) {
   await rename(temporaryPath, storePath);
 }
 
+const MAX_STAKE = 10;
+const BET_ALIAS = { H: 'H', D: 'D', A: 'A', PASS: 'PASS', WIN: 'H', DRAW: 'D', LOSS: 'A', HOME: 'H', AWAY: 'A', NONE: 'PASS', SKIP: 'PASS' };
+const round2 = (value) => Math.round((value + Number.EPSILON) * 100) / 100;
+
+function normalizeBet(value) {
+  return BET_ALIAS[String(value ?? 'PASS').toUpperCase()];
+}
+
 export function validatePublishedRun(input, validMatchIds) {
   if (!input || typeof input !== 'object') return 'Request body must be an object.';
   if (typeof input.id !== 'string' || !input.id.trim() || input.id.length > 100) return 'A valid run id is required.';
   if (typeof input.model !== 'string' || !input.model.trim() || input.model.trim().length > 100) return 'A model name is required.';
-  if (!['bet365', 'betfairExchange', 'marketAverage', 'marketBest'].includes(input.oddsSource)) return 'Unknown odds source.';
-  if (!Array.isArray(input.predictions) || input.predictions.length !== validMatchIds.size) return `Published runs must contain all ${validMatchIds.size} predictions.`;
+  if (!Array.isArray(input.wagers) || input.wagers.length !== validMatchIds.size) return `Published runs must contain all ${validMatchIds.size} wagers.`;
   const seen = new Set();
-  for (const prediction of input.predictions) {
-    if (!prediction || typeof prediction.matchId !== 'string' || !validMatchIds.has(prediction.matchId)) return 'A prediction contains an unknown match id.';
-    if (!['H', 'D', 'A', 'WIN', 'DRAW', 'LOSS'].includes(prediction.outcome)) return 'Prediction outcomes must be WIN, DRAW, or LOSS.';
-    if (seen.has(prediction.matchId)) return `Duplicate prediction for ${prediction.matchId}.`;
-    seen.add(prediction.matchId);
+  for (const wager of input.wagers) {
+    if (!wager || typeof wager.matchId !== 'string' || !validMatchIds.has(wager.matchId)) return 'A wager contains an unknown match id.';
+    if (!normalizeBet(wager.bet)) return 'Wager bet must be H, D, A, or PASS.';
+    if (typeof wager.stake !== 'number' || !Number.isFinite(wager.stake) || wager.stake < 0 || wager.stake > MAX_STAKE + 1e-9) return `Stakes must be between 0 and ${MAX_STAKE}.`;
+    if (!wager.probs || typeof wager.probs !== 'object') return 'Each wager needs a probs object.';
+    if (seen.has(wager.matchId)) return `Duplicate wager for ${wager.matchId}.`;
+    seen.add(wager.matchId);
   }
   for (const field of ['notes', 'modelVersion', 'reasoningEffort', 'promptVersion', 'publisher']) {
     if (input[field] !== undefined && (typeof input[field] !== 'string' || input[field].length > 500)) return `${field} is invalid.`;
@@ -40,9 +49,14 @@ export function validatePublishedRun(input, validMatchIds) {
 export function normalizePublishedRun(input) {
   return {
     ...input,
-    predictions: input.predictions.map((prediction) => ({
-      ...prediction,
-      outcome: prediction.outcome === 'WIN' ? 'H' : prediction.outcome === 'DRAW' ? 'D' : prediction.outcome === 'LOSS' ? 'A' : prediction.outcome,
-    })),
+    wagers: input.wagers.map((wager) => {
+      const bet = normalizeBet(wager.bet);
+      const stake = bet === 'PASS' ? 0 : Math.max(0, Math.min(MAX_STAKE, round2(Number(wager.stake) || 0)));
+      const raw = wager.probs || {};
+      let H = Number(raw.H) || 0, D = Number(raw.D) || 0, A = Number(raw.A) || 0;
+      const total = H + D + A;
+      if (total > 0) { H /= total; D /= total; A /= total; }
+      return { matchId: wager.matchId, bet, stake, probs: { H, D, A } };
+    }),
   };
 }
