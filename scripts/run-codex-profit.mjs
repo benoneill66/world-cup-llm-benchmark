@@ -1,15 +1,13 @@
-// Isolated profit-benchmark batch runner.
+// Isolated profit-benchmark runner for GPT models via the Codex CLI.
 //
-// Runs each model N times per reasoning level in a fresh ephemeral directory
-// OUTSIDE the repo, all built-in tools disabled, empty strict MCP config, so the
-// model cannot read src/data/matches.json (the results) or reach the web.
-// Reasoning level is set via MAX_THINKING_TOKENS. Zero web searches is enforced.
+// Mirrors run-profit-benchmark.mjs (Claude) but drives `codex exec`. Each run
+// executes in a fresh ephemeral directory OUTSIDE the repo, read-only sandbox,
+// with user config and rules ignored, so the model cannot read the results
+// dataset or reach the web. Reasoning level maps to codex model_reasoning_effort.
+// The wager array is forced with --output-schema. Idempotent: skips ids already
+// in the committed catalogue.
 //
-// Usage:
-//   node scripts/run-profit-benchmark.mjs <outDir> [runsPerCell] [concurrency] [modelFilter] [reasoningFilter]
-//   e.g. node scripts/run-profit-benchmark.mjs .out 5 4 opus medium
-//
-// Writes <outDir>/results.json — validated, publish-ready run objects (wagers).
+// Usage: node scripts/run-codex-profit.mjs <outDir> [runsPerCell] [concurrency] [modelFilter] [reasoningFilter]
 
 import { execFile } from 'node:child_process';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
@@ -18,12 +16,13 @@ import { dirname, join, resolve } from 'node:path';
 import matches from '../src/data/matches.json' with { type: 'json' };
 
 const here = dirname(fileURLToPath(import.meta.url));
-const outDir = resolve(process.argv[2] || join(here, '../.profit-out'));
+const outDir = resolve(process.argv[2] || join(here, '../.codex-out'));
 const runsPerCell = Number(process.argv[3] || 5);
 const concurrency = Number(process.argv[4] || 4);
 const modelFilter = (process.argv[5] || '').toLowerCase();
 const reasoningFilter = (process.argv[6] || '').toLowerCase();
 
+const CODEX = '/opt/homebrew/bin/codex'; // full path bypasses the `codex`→`codex --yolo` shell alias
 const validIds = new Set(matches.map((match) => match.id));
 const promptVersion = 'profit-v1';
 const MAX_STAKE = 10;
@@ -33,15 +32,14 @@ const price = (line, o) => (o === 'H' ? line.home : o === 'D' ? line.draw : line
 const bestOdds = (match, o) => Math.max(...FEEDS.map((f) => price(match.odds[f], o)));
 
 const models = [
-  ['haiku', 'Claude Haiku'],
-  ['sonnet', 'Claude Sonnet'],
-  ['opus', 'Claude Opus'],
-  ['fable', 'Claude Fable'],
+  ['gpt-5.4-mini', 'GPT-5.4 Mini'],
+  ['gpt-5.4', 'GPT-5.4'],
+  ['gpt-5.5', 'GPT-5.5'],
+  ['gpt-5.6-luna', 'GPT-5.6 Luna'],
+  ['gpt-5.6-sol', 'GPT-5.6 Sol'],
+  ['gpt-5.6-terra', 'GPT-5.6 Terra'],
 ];
-const reasoningLevels = [
-  ['low', 2000],
-  ['medium', 10000],
-];
+const reasoningLevels = ['low', 'medium'];
 
 const fixtures = matches.map((match) => ({
   matchId: match.id,
@@ -79,72 +77,62 @@ const basePrompt = [
   '- Do not use remembered actual results. If you recognise a result, ignore it and reason as a pre-match bettor.',
   '- Use only the fixture data, the odds below, and football knowledge available before 11 June 2026.',
   '',
-  'OUTPUT: Return ONLY a JSON array, one object per match, every matchId included exactly once:',
-  '[{"matchId":"2026-A-01","bet":"A","stake":6.5,"probs":{"H":0.30,"D":0.28,"A":0.42}}]',
+  'OUTPUT: Return ONLY a JSON object of the form {"wagers":[ ... ]} with one entry per match, every matchId included exactly once:',
+  '{"wagers":[{"matchId":"2026-A-01","bet":"A","stake":6.5,"probs":{"H":0.30,"D":0.28,"A":0.42}}]}',
   '- "bet": one of "H","D","A","PASS".  "stake": number £0–£' + MAX_STAKE + ' (0 when PASS); all stakes must sum to £' + STARTING_BANKROLL + '.',
   '- "probs": YOUR probabilities for H, D and A; they must sum to 1.',
   '',
   JSON.stringify(fixtures, null, 2),
 ].join('\n');
 
-const isolationSystemPrompt =
-  'You are running in an isolated profit benchmark. You have no tools, no web access, and no file access. ' +
-  'Do not attempt to use any. Return only the requested JSON array.';
+const wagerItem = {
+  type: 'object', additionalProperties: false,
+  properties: {
+    matchId: { type: 'string' },
+    bet: { type: 'string', enum: ['H', 'D', 'A', 'PASS'] },
+    stake: { type: 'number' },
+    probs: { type: 'object', additionalProperties: false, properties: { H: { type: 'number' }, D: { type: 'number' }, A: { type: 'number' } }, required: ['H', 'D', 'A'] },
+  },
+  required: ['matchId', 'bet', 'stake', 'probs'],
+};
+const outputSchema = { type: 'object', additionalProperties: false, properties: { wagers: { type: 'array', minItems: 72, maxItems: 72, items: wagerItem } }, required: ['wagers'] };
 
-function runClaude(jobDir, alias, thinkingTokens) {
+function runCodex(jobDir, model, reasoning) {
   return new Promise((resolvePromise) => {
     const args = [
-      '-p', basePrompt,
-      '--model', alias,
-      '--output-format', 'json',
-      '--tools', '',
-      '--strict-mcp-config',
-      '--mcp-config', join(jobDir, 'empty-mcp.json'),
-      '--append-system-prompt', isolationSystemPrompt,
+      'exec', '-',
+      '-m', model,
+      '-c', `model_reasoning_effort=${reasoning}`,
+      '-s', 'read-only',
+      '-C', jobDir,
+      '--skip-git-repo-check', '--ephemeral', '--ignore-user-config', '--ignore-rules',
+      '--output-schema', join(jobDir, 'schema.json'),
+      '-o', join(jobDir, 'out.json'),
+      '--color', 'never',
     ];
-    execFile('claude', args, {
-      cwd: jobDir,
-      env: { ...process.env, MAX_THINKING_TOKENS: String(thinkingTokens) },
-      maxBuffer: 64 * 1024 * 1024,
-      timeout: 12 * 60 * 1000,
-    }, (error, stdout, stderr) => {
-      if (error) return resolvePromise({ error: `${error.message}\n${stderr}`.slice(0, 500) });
-      try { resolvePromise({ wrapper: JSON.parse(stdout) }); }
-      catch { resolvePromise({ error: `Unparseable CLI output: ${stdout.slice(0, 200)}` }); }
-    });
+    const child = execFile(CODEX, args, { cwd: jobDir, timeout: 12 * 60 * 1000, maxBuffer: 64 * 1024 * 1024 },
+      (error, _stdout, stderr) => resolvePromise({ error: error ? `${error.message}\n${stderr}`.slice(0, 400) : null }));
+    child.stdin.end(basePrompt);
   });
 }
 
 const BET_ALIAS = { H: 'H', D: 'D', A: 'A', PASS: 'PASS', WIN: 'H', DRAW: 'D', LOSS: 'A', HOME: 'H', AWAY: 'A', NONE: 'PASS', SKIP: 'PASS' };
 const round2 = (v) => Math.round((v + Number.EPSILON) * 100) / 100;
 
-function extractArray(resultText) {
-  let text = String(resultText ?? '').replace(/```json\s*/gi, '').replace(/```/g, '').trim();
-  let parsed;
-  try { parsed = JSON.parse(text); }
-  catch {
-    const start = text.indexOf('['), end = text.lastIndexOf(']');
-    if (start < 0 || end < start) throw new Error('No JSON array found in response.');
-    parsed = JSON.parse(text.slice(start, end + 1));
-  }
-  const array = Array.isArray(parsed) ? parsed : parsed.wagers || parsed.bets || parsed.predictions;
-  if (!Array.isArray(array)) throw new Error('Response did not contain a wager array.');
-  return array;
-}
-
-function validate(rawWagers, label) {
-  if (rawWagers.length !== 72) throw new Error(`${label}: expected 72 wagers, got ${rawWagers.length}.`);
+function validate(raw, label) {
+  const arr = Array.isArray(raw) ? raw : raw.wagers;
+  if (!Array.isArray(arr) || arr.length !== 72) throw new Error(`${label}: expected 72 wagers, got ${arr?.length}.`);
   const seen = new Set();
-  return rawWagers.map((w) => {
+  return arr.map((w) => {
     const matchId = w.matchId ?? w.id;
     if (!validIds.has(matchId)) throw new Error(`${label}: unknown match ${matchId}.`);
     if (seen.has(matchId)) throw new Error(`${label}: duplicate match ${matchId}.`);
     seen.add(matchId);
     const bet = BET_ALIAS[String(w.bet ?? w.outcome ?? 'PASS').toUpperCase()];
     if (!bet) throw new Error(`${label}: invalid bet "${w.bet}" for ${matchId}.`);
-    let stake = bet === 'PASS' ? 0 : Math.max(0, Math.min(MAX_STAKE, round2(Number(w.stake) || 0)));
-    const raw = w.probs || w.probabilities || {};
-    let H = Number(raw.H ?? raw.home) || 0, D = Number(raw.D ?? raw.draw) || 0, A = Number(raw.A ?? raw.away) || 0;
+    const stake = bet === 'PASS' ? 0 : Math.max(0, Math.min(MAX_STAKE, round2(Number(w.stake) || 0)));
+    const p = w.probs || {};
+    let H = Number(p.H) || 0, D = Number(p.D) || 0, A = Number(p.A) || 0;
     const total = H + D + A;
     if (total > 0) { H /= total; D /= total; A /= total; }
     return { matchId, bet, stake, probs: { H, D, A } };
@@ -154,25 +142,22 @@ function validate(rawWagers, label) {
 async function runJob(job) {
   const jobDir = join(outDir, job.id);
   await mkdir(jobDir, { recursive: true });
-  await writeFile(join(jobDir, 'empty-mcp.json'), '{"mcpServers":{}}\n');
+  await writeFile(join(jobDir, 'schema.json'), JSON.stringify(outputSchema));
   for (let attempt = 1; attempt <= 2; attempt += 1) {
-    const { wrapper, error } = await runClaude(jobDir, job.alias, job.thinkingTokens);
-    if (error) { if (attempt === 2) return { ok: false, id: job.id, error }; continue; }
-    await writeFile(join(jobDir, 'response.json'), JSON.stringify(wrapper, null, 2));
+    const { error } = await runCodex(jobDir, job.model, job.reasoning);
+    if (error && attempt === 2) return { ok: false, id: job.id, error };
+    if (error) continue;
     try {
-      const usage = wrapper.modelUsage || {};
-      const webSearches = Object.values(usage).reduce((total, item) => total + (item.webSearchRequests || 0), 0);
-      if (webSearches) throw new Error(`${job.id}: reported ${webSearches} web searches.`);
-      const actualVersion = Object.keys(usage).find((v) => v.includes(`-${job.alias}-`)) || Object.keys(usage).at(-1) || job.alias;
-      const wagers = validate(extractArray(wrapper.result), job.id);
+      const raw = JSON.parse(await readFile(join(jobDir, 'out.json'), 'utf8'));
+      const wagers = validate(raw, job.id);
       return {
         ok: true, id: job.id,
         run: {
-          id: job.id, model: job.name, modelVersion: actualVersion, reasoningEffort: job.reasoning,
-          promptVersion, publisher: 'Claude Code 2.1.206',
+          id: job.id, model: job.name, modelVersion: job.model, reasoningEffort: job.reasoning,
+          promptVersion, publisher: 'Codex CLI 0.144.1',
           notes:
-            'Isolated ephemeral directory outside the repo; all built-in tools disabled; empty strict MCP config; ' +
-            `no result data supplied; MAX_THINKING_TOKENS=${job.thinkingTokens}; telemetry confirmed zero web searches.`,
+            'Isolated ephemeral directory outside the repo; read-only sandbox; user config and rules ignored; ' +
+            `no result data supplied; no tools or web access; reasoning effort ${job.reasoning}.`,
           createdAt: new Date().toISOString(), wagers,
         },
       };
@@ -183,27 +168,26 @@ async function runJob(job) {
 
 async function main() {
   await mkdir(outDir, { recursive: true });
-  // Skip runs already in the committed catalogue so the grid is idempotent.
   let published = new Set();
   try {
     const catalogue = JSON.parse(await readFile(resolve(here, '../src/data/published-runs.json'), 'utf8'));
     published = new Set(catalogue.map((run) => run.id));
-  } catch { /* no catalogue yet */ }
+  } catch { /* none yet */ }
 
   const jobs = [];
-  for (const [alias, name] of models) {
-    if (modelFilter && alias !== modelFilter) continue;
-    for (const [reasoning, thinkingTokens] of reasoningLevels) {
+  for (const [model, name] of models) {
+    if (modelFilter && model !== modelFilter) continue;
+    for (const reasoning of reasoningLevels) {
       if (reasoningFilter && reasoning !== reasoningFilter) continue;
       for (let n = 1; n <= runsPerCell; n += 1) {
-        const id = `claude-${alias}-${reasoning}-profit-run${n}`;
+        const id = `codex-${model}-${reasoning}-profit-run${n}`;
         if (published.has(id)) continue;
-        jobs.push({ id, alias, name, reasoning, thinkingTokens });
+        jobs.push({ id, model, name, reasoning });
       }
     }
   }
   if (!jobs.length) { console.log('Nothing to run — every cell is already published.'); return; }
-  console.log(`Running ${jobs.length} isolated profit jobs (concurrency ${concurrency}); skipped ${published.size} already published…`);
+  console.log(`Running ${jobs.length} isolated codex jobs (concurrency ${concurrency}); skipped ${published.size} already published…`);
 
   const results = [];
   let cursor = 0, done = 0;
