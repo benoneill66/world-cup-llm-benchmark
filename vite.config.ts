@@ -1,10 +1,11 @@
 import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
 
-export default defineConfig({
-  // Relative base so the static build works from a GitHub Pages project subpath
-  // (https://<user>.github.io/<repo>/) without hardcoding the repo name.
-  base: './',
+// GitHub Pages serves the app from a project subpath (/world-cup-llm-benchmark/),
+// so production builds need that absolute base for BrowserRouter + asset URLs.
+// Dev and tests run at the root.
+export default defineConfig(({ mode }) => ({
+  base: mode === 'production' ? '/world-cup-llm-benchmark/' : '/',
   plugins: [react()],
   server: {
     proxy: {
@@ -14,4 +15,4 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
   },
-});
+}));

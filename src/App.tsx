@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { BrowserRouter, NavLink, Navigate, Route, Routes, useNavigate, useParams } from 'react-router-dom';
 import matchesData from './data/matches.json';
 import {
   BET_LABELS,
@@ -25,117 +26,126 @@ const baseline: EvaluationRun = {
   notes: `Reference: the £${STARTING_BANKROLL} bankroll spread evenly across the best-priced favourite in every match. Not an LLM.`,
 };
 
-type View = 'dashboard' | 'published' | 'models' | 'new-run' | 'prompt';
-
 const money = (value: number) => `${value >= 0 ? '+' : '−'}£${Math.abs(value).toFixed(2)}`;
 const gbp = (value: number) => `£${value.toFixed(2)}`;
-const pct = (value: number) => `${(value * 100).toFixed(1)}%`;
+const pct = (value: number) => `${value >= 0 ? '+' : '−'}${Math.abs(value * 100).toFixed(1)}%`;
+const pctPlain = (value: number) => `${(value * 100).toFixed(1)}%`;
 
 function App() {
-  const [view, setView] = useState<View>('dashboard');
   const [userRuns, setUserRuns] = useState<EvaluationRun[]>(loadRuns);
   const [publishedRuns, setPublishedRuns] = useState<EvaluationRun[]>([]);
   const runs = useMemo(() => {
     const ids = new Set<string>();
     return [baseline, ...publishedRuns, ...userRuns].filter((run) => !ids.has(run.id) && Boolean(ids.add(run.id)));
   }, [publishedRuns, userRuns]);
-  const [selectedId, setSelectedId] = useState(BASELINE_ID);
-  const selectedRun = runs.find((run) => run.id === selectedId) ?? runs[0];
 
   useEffect(() => saveRuns(userRuns), [userRuns]);
   useEffect(() => { fetchPublishedRuns().then(setPublishedRuns).catch(() => setPublishedRuns([])); }, []);
 
-  const addRun = (run: EvaluationRun) => {
-    setUserRuns((current) => [run, ...current]);
-    setSelectedId(run.id);
-    setView('dashboard');
-  };
+  const addRun = (run: EvaluationRun) => setUserRuns((current) => [run, ...current]);
+  const deleteRun = (id: string) => setUserRuns((current) => current.filter((run) => run.id !== id));
 
-  const deleteRun = () => {
-    if (selectedRun.id === BASELINE_ID || selectedRun.publishedAt) return;
-    if (!window.confirm(`Delete ${selectedRun.model}?`)) return;
-    setUserRuns((current) => current.filter((run) => run.id !== selectedRun.id));
-    setSelectedId(BASELINE_ID);
-  };
+  return (
+    <BrowserRouter basename={import.meta.env.BASE_URL.replace(/\/$/, '')}>
+      <Layout>
+        <Routes>
+          <Route path="/" element={<Dashboard runs={runs} onDelete={deleteRun} />} />
+          <Route path="/runs/:id" element={<Dashboard runs={runs} onDelete={deleteRun} />} />
+          <Route path="/published" element={<PublishedRuns runs={publishedRuns} />} />
+          <Route path="/models" element={<ModelsComparison runs={publishedRuns} />} />
+          <Route path="/models/:model" element={<ModelsComparison runs={publishedRuns} />} />
+          <Route path="/models/:model/:reasoning" element={<ModelsComparison runs={publishedRuns} />} />
+          <Route path="/new" element={<RunBuilder onSave={addRun} />} />
+          <Route path="/prompt" element={<PromptLab />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </Layout>
+    </BrowserRouter>
+  );
+}
 
-  const openRun = (id: string) => { setSelectedId(id); setView('dashboard'); };
-
+function Layout({ children }: { children: React.ReactNode }) {
+  const link = ({ isActive }: { isActive: boolean }) => (isActive ? 'active' : '');
   return (
     <div className="app-shell">
       <aside className="sidebar">
-        <div className="brand">
-          <div className="brand-mark">T</div>
-          <div><strong>TOUCHLINE</strong><span>LLM betting benchmark</span></div>
-        </div>
+        <NavLink to="/" className="brand">
+          <div className="brand-mark">◈</div>
+          <div><strong>TOUCHLINE</strong><span>Betting desk</span></div>
+        </NavLink>
         <nav>
-          <button className={view === 'dashboard' ? 'active' : ''} onClick={() => setView('dashboard')}><span>◫</span> Run detail</button>
-          <button className={view === 'published' ? 'active' : ''} onClick={() => setView('published')}><span>◎</span> Published runs</button>
-          <button className={view === 'models' ? 'active' : ''} onClick={() => setView('models')}><span>≋</span> Models</button>
-          <button className={view === 'new-run' ? 'active' : ''} onClick={() => setView('new-run')}><span>＋</span> New evaluation</button>
-          <button className={view === 'prompt' ? 'active' : ''} onClick={() => setView('prompt')}><span>⌘</span> Prompt lab</button>
+          <NavLink to="/" end className={link}><span>▸</span> Run detail</NavLink>
+          <NavLink to="/published" className={link}><span>▸</span> Published runs</NavLink>
+          <NavLink to="/models" className={link}><span>▸</span> Models</NavLink>
+          <NavLink to="/new" className={link}><span>＋</span> New evaluation</NavLink>
+          <NavLink to="/prompt" className={link}><span>⌘</span> Prompt lab</NavLink>
         </nav>
         <div className="sidebar-note">
-          <span className="live-dot" /> PROFIT CHALLENGE
-          <strong>World Cup 2026</strong>
-          <p>72 matches · £{STARTING_BANKROLL} bankroll<br />£0–£{MAX_STAKE}/match · best-price settle</p>
+          <span className="note-tag">The challenge</span>
+          <strong>Maximise profit</strong>
+          <p>£{STARTING_BANKROLL} bankroll · 72 matches<br />Bet the value, not the favourite.</p>
         </div>
       </aside>
-
-      <main>
-        {view === 'dashboard' && (
-          <Dashboard run={selectedRun} runs={runs} onSelect={setSelectedId} onNew={() => setView('new-run')} onDelete={deleteRun} />
-        )}
-        {view === 'published' && <PublishedRuns runs={publishedRuns} onOpen={openRun} />}
-        {view === 'models' && <ModelsComparison runs={publishedRuns} onOpen={openRun} />}
-        {view === 'new-run' && <RunBuilder onSave={addRun} onCancel={() => setView('dashboard')} />}
-        {view === 'prompt' && <PromptLab />}
-      </main>
+      <main>{children}</main>
     </div>
   );
 }
 
-function Dashboard({ run, runs, onSelect, onNew, onDelete }: {
-  run: EvaluationRun;
-  runs: EvaluationRun[];
-  onSelect: (id: string) => void;
-  onNew: () => void;
-  onDelete: () => void;
-}) {
+function Dashboard({ runs, onDelete }: { runs: EvaluationRun[]; onDelete: (id: string) => void }) {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const run = runs.find((item) => item.id === id) ?? runs.find((item) => item.id === BASELINE_ID) ?? runs[0];
   const metrics = useMemo(() => evaluateRun(run, matches), [run]);
   const comparisons = runs.map((item) => ({ run: item, metrics: evaluateRun(item, matches) }));
   const publishedOptions = runs.filter((item) => item.publishedAt);
   const draftOptions = runs.filter((item) => item.id !== BASELINE_ID && !item.publishedAt);
-  const runStatus = run.id === BASELINE_ID ? 'REFERENCE BASELINE' : run.publishedAt ? 'PUBLISHED RUN' : 'YOUR LOCAL RUN';
+  const kind = run.id === BASELINE_ID ? 'reference' : run.publishedAt ? 'published' : 'draft';
+  const status = kind === 'reference' ? 'Reference baseline' : kind === 'published' ? 'Published run' : 'Your local run';
+
+  const remove = () => {
+    if (run.id === BASELINE_ID || run.publishedAt) return;
+    if (!window.confirm(`Delete ${run.model}?`)) return;
+    onDelete(run.id);
+    navigate('/');
+  };
 
   return (
     <div className="page">
       <header className="page-header">
-        <div><p className="eyebrow">{runStatus} · WORLD CUP 2026</p><h1>{run.model}</h1><p>{run.modelVersion ? `${run.modelVersion} · ` : ''}{run.reasoningEffort ? `${run.reasoningEffort} reasoning · ` : ''}£{STARTING_BANKROLL} bankroll · maximise profit</p></div>
-        <button className="primary" onClick={onNew}>＋ New evaluation</button>
+        <div>
+          <p className="eyebrow"><span className={`status-dot ${kind}`} />{status}</p>
+          <h1>{run.model}</h1>
+          <p className="subhead">{run.modelVersion ? `${run.modelVersion} · ` : ''}{run.reasoningEffort ? `${run.reasoningEffort} reasoning · ` : ''}£{STARTING_BANKROLL} bankroll, maximise profit</p>
+        </div>
+        <button className="primary" onClick={() => navigate('/new')}>＋ New evaluation</button>
       </header>
-
-      <section className={`run-context ${run.id === BASELINE_ID ? 'reference' : run.publishedAt ? 'published' : 'draft'}`}>
-        <strong>{run.id === BASELINE_ID ? 'This is not an LLM result' : run.publishedAt ? 'Official benchmark result' : 'Your private local run'}</strong>
-        <span>{run.id === BASELINE_ID ? `A reference that spreads the £${STARTING_BANKROLL} bankroll evenly across the shortest-priced (favourite) side every match, at the best available price. Beat it by finding value.` : run.publishedAt ? `Published ${new Date(run.publishedAt).toLocaleDateString()}${run.publisher ? ` via ${run.publisher}` : ''}.` : 'Only stored in this browser. Copy the Prompt lab pack, run your own model, and paste its wagers to see its P&L.'}</span>
-      </section>
 
       <section className="run-toolbar panel">
         <div className="select-wrap">
           <label>Evaluation run</label>
-          <select value={run.id} onChange={(event) => onSelect(event.target.value)}>
+          <select value={run.id} onChange={(event) => navigate(`/runs/${event.target.value}`)}>
             {draftOptions.length > 0 && <optgroup label="Your local runs">{draftOptions.map((item) => <option value={item.id} key={item.id}>{item.model}{item.modelVersion ? ` · ${item.modelVersion}` : ''}</option>)}</optgroup>}
             {publishedOptions.length > 0 && <optgroup label="Published runs">{publishedOptions.map((item) => <option value={item.id} key={item.id}>{item.model}{item.reasoningEffort ? ` · ${item.reasoningEffort}` : ''}</option>)}</optgroup>}
             <optgroup label="Reference only"><option value={baseline.id}>{baseline.model} · not an LLM</option></optgroup>
           </select>
         </div>
-        <div className="run-meta"><BankrollPill value={metrics.finalBankroll} />{run.publishedAt && <span className="published-pill">✓ PUBLISHED</span>}<span>{metrics.betsPlaced} bets · {metrics.passes} pass</span><span>£{metrics.totalStaked.toFixed(0)} staked</span></div>
-        {run.id !== BASELINE_ID && !run.publishedAt && <div className="run-actions"><button className="text-button danger" onClick={onDelete}>Delete</button></div>}
+        <div className="run-meta">
+          <span className="meta-chip">{metrics.betsPlaced} bets</span>
+          <span className="meta-chip">{metrics.passes} passed</span>
+          <span className="meta-chip">£{metrics.totalStaked.toFixed(0)} staked</span>
+          {run.publishedAt && <span className="meta-chip live">✓ published</span>}
+        </div>
+        {kind === 'draft' && <button className="text-button danger" onClick={remove}>Delete run</button>}
+      </section>
+
+      <section className={`run-context ${kind}`}>
+        <span>{kind === 'reference' ? `Not an LLM — this spreads the £${STARTING_BANKROLL} evenly across the shortest-priced favourite every match, at the best available price. Beat it by finding value.` : kind === 'published' ? `Published ${new Date(run.publishedAt!).toLocaleDateString()}${run.publisher ? ` via ${run.publisher}` : ''}. Settled at the best of four closing lines.` : 'Only stored in this browser. Copy the Prompt lab pack, run your own model, and paste its wagers to score it here.'}</span>
       </section>
 
       <section className="metric-grid">
-        <Metric label="Net profit" value={money(metrics.totalPnl)} note={`bankroll ${gbp(metrics.finalBankroll)}`} tone={metrics.totalPnl >= 0 ? 'positive' : 'negative'} />
+        <Metric label="Net profit" value={money(metrics.totalPnl)} note={`bankroll ends ${gbp(metrics.finalBankroll)}`} tone={metrics.totalPnl >= 0 ? 'positive' : 'negative'} hero />
         <Metric label="Return on bankroll" value={pct(metrics.returnOnBankroll)} note={`£${metrics.totalStaked.toFixed(0)} of £${STARTING_BANKROLL} staked`} tone={metrics.returnOnBankroll >= 0 ? 'positive' : 'negative'} />
-        <Metric label="Hit rate" value={pct(metrics.hitRate)} note={`${metrics.betsPlaced} bets · avg ${metrics.averageOdds.toFixed(2)}`} />
+        <Metric label="Hit rate" value={pctPlain(metrics.hitRate)} note={`${metrics.betsPlaced} bets · avg odds ${metrics.averageOdds.toFixed(2)}`} />
         <Metric label="Brier score" value={metrics.brier.toFixed(3)} note="calibration · lower is better" tone={metrics.brier <= 0.6 ? 'positive' : undefined} />
       </section>
 
@@ -145,36 +155,35 @@ function Dashboard({ run, runs, onSelect, onNew, onDelete }: {
           <ProfitChart metrics={metrics} />
         </div>
         <div className="panel comparison-panel">
-          <PanelTitle title="Profit leaderboard" detail="Reference, your local, and published runs by net P&L" />
-          {[...comparisons].sort((a, b) => b.metrics.totalPnl - a.metrics.totalPnl).map(({ run: item, metrics: itemMetrics }, index) => (
-            <button className={`leader-row ${item.id === run.id ? 'selected' : ''}`} key={item.id} onClick={() => onSelect(item.id)}>
-              <span className="rank">{String(index + 1).padStart(2, '0')}</span>
-              <span className="leader-name"><strong>{item.model}</strong><small>{itemMetrics.betsPlaced} bets · {pct(itemMetrics.hitRate)} hit</small></span>
-              <span className={itemMetrics.totalPnl >= 0 ? 'positive-text' : 'negative-text'}>{money(itemMetrics.totalPnl)}</span>
-            </button>
-          ))}
+          <PanelTitle title="Leaderboard" detail="Every run by net P&L" />
+          <div className="leader-list">
+            {[...comparisons].sort((a, b) => b.metrics.totalPnl - a.metrics.totalPnl).map(({ run: item, metrics: itemMetrics }, index) => (
+              <button className={`leader-row ${item.id === run.id ? 'selected' : ''}`} key={item.id} onClick={() => navigate(`/runs/${item.id}`)}>
+                <span className="rank">{String(index + 1).padStart(2, '0')}</span>
+                <span className="leader-name"><strong>{item.model}</strong><small>{itemMetrics.betsPlaced} bets · {pctPlain(itemMetrics.hitRate)} hit</small></span>
+                <span className={`mono ${itemMetrics.totalPnl >= 0 ? 'positive-text' : 'negative-text'}`}>{money(itemMetrics.totalPnl)}</span>
+              </button>
+            ))}
+          </div>
         </div>
       </section>
 
       <section className="panel results-panel">
-        <div className="results-heading">
-          <PanelTitle title="Wager ledger" detail="Every decision settled at the best available price" />
-        </div>
+        <div className="results-heading"><PanelTitle title="Wager ledger" detail="Every decision settled at the best available price" /></div>
         <div className="table-scroll">
           <table>
-            <thead><tr><th>Match</th><th>Bet</th><th>Stake</th><th>Best odds</th><th>Model P(side)</th><th>Result</th><th>P&L</th></tr></thead>
+            <thead><tr><th>Match</th><th>Bet</th><th>Stake</th><th>Best odds</th><th>Model P(side)</th><th>Result</th><th>P&amp;L</th></tr></thead>
             <tbody>
               {metrics.settled.map((row) => {
                 const placed = row.bet !== 'PASS' && row.stake > 0;
-                const backedProb = row.bet === 'PASS' ? 0 : row.probs[row.bet];
                 return (
                   <tr key={row.match.id} className={placed ? '' : 'pass-row'}>
-                    <td><div className="fixture"><span>GROUP {row.match.group}</span><strong>{row.match.homeTeam} <i>vs</i> {row.match.awayTeam}</strong></div></td>
+                    <td><div className="fixture"><span>GROUP {row.match.group}</span><strong>{row.match.homeTeam} <i>v</i> {row.match.awayTeam}</strong></div></td>
                     <td><BetTag bet={row.bet} won={row.won} placed={placed} isValue={row.isValue} /></td>
                     <td className="mono">{placed ? gbp(row.stake) : '—'}</td>
                     <td className="mono">{placed ? row.odds.toFixed(2) : '—'}</td>
-                    <td className="mono">{placed ? pct(backedProb) : '—'}</td>
-                    <td><strong>{outcomeName(row.actual, row.match)}</strong></td>
+                    <td className="mono muted-num">{placed && row.bet !== 'PASS' ? pctPlain(row.probs[row.bet]) : '—'}</td>
+                    <td><span className="actual">{outcomeName(row.actual, row.match)}</span></td>
                     <td className={`mono pnl ${row.pnl > 0 ? 'positive-text' : row.pnl < 0 ? 'negative-text' : ''}`}>{placed ? money(row.pnl) : '—'}</td>
                   </tr>
                 );
@@ -183,29 +192,28 @@ function Dashboard({ run, runs, onSelect, onNew, onDelete }: {
           </table>
         </div>
       </section>
-      <p className="method-note">The whole £{STARTING_BANKROLL} bankroll is deployed — stakes are normalised to sum to £{STARTING_BANKROLL}, capped at £{MAX_STAKE} per match. A winning £s bet at best decimal odds o returns s×(o−1); a losing bet loses s. Return on bankroll is net P&L over £{STARTING_BANKROLL}; the Brier score grades the model's H/D/A probabilities (0 = perfect, 0.667 = uniform guess).</p>
+      <p className="method-note">The whole £{STARTING_BANKROLL} bankroll is deployed — stakes normalise to sum to £{STARTING_BANKROLL}, capped at £{MAX_STAKE} per match. A winning £s bet at best odds o returns s×(o−1); a losing bet loses s. Brier grades the model's H/D/A probabilities (0 perfect, 0.667 uniform).</p>
     </div>
   );
 }
 
-function PublishedRuns({ runs, onOpen }: { runs: EvaluationRun[]; onOpen: (id: string) => void }) {
+function PublishedRuns({ runs }: { runs: EvaluationRun[] }) {
+  const navigate = useNavigate();
   const [query, setQuery] = useState('');
   const filtered = runs.filter((run) => !query || `${run.model} ${run.modelVersion ?? ''} ${run.reasoningEffort ?? ''} ${run.publisher ?? ''}`.toLowerCase().includes(query.toLowerCase()));
   return (
-    <div className="page catalogue-page">
-      <header className="page-header"><div><p className="eyebrow">PUBLIC BENCHMARK LEDGER</p><h1>Published runs</h1><p>Browse complete, reproducible 72-match profit runs by model.</p></div><span className="catalogue-count">{runs.length} RUN{runs.length === 1 ? '' : 'S'}</span></header>
-      <section className="panel catalogue-toolbar catalogue-toolbar-single">
-        <input aria-label="Search published runs" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search model, version, reasoning, or publisher…" />
-      </section>
-      {!filtered.length && <div className="catalogue-state"><strong>{runs.length ? 'No runs match your search' : 'No published runs yet'}</strong><span>{runs.length ? 'Clear the search to see the full catalogue.' : 'Published profit runs will appear here.'}</span></div>}
+    <div className="page">
+      <header className="page-header"><div><p className="eyebrow">Public ledger</p><h1>Published runs</h1><p className="subhead">Browse complete, reproducible 72-match profit runs by model.</p></div><span className="count-badge">{runs.length} run{runs.length === 1 ? '' : 's'}</span></header>
+      <section className="panel catalogue-toolbar"><input aria-label="Search published runs" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search model, version, reasoning, or publisher…" /></section>
+      {!filtered.length && <div className="empty-state"><strong>{runs.length ? 'No runs match your search' : 'No published runs yet'}</strong><span>{runs.length ? 'Clear the search to see the full catalogue.' : 'Published profit runs will appear here.'}</span></div>}
       <section className="run-card-grid">
         {filtered.map((run) => {
           const metrics = evaluateRun(run, matches);
-          return <button className="run-card panel" key={run.id} onClick={() => onOpen(run.id)}>
-            <div className="run-card-head"><BankrollPill value={metrics.finalBankroll} /><span>{run.publishedAt ? new Date(run.publishedAt).toLocaleDateString() : ''}</span></div>
-            <h2>{run.model}</h2><p>{run.modelVersion || 'Version not specified'}{run.reasoningEffort ? ` · ${run.reasoningEffort} reasoning` : ''}</p>
-            <div className="run-card-metrics"><span><small>Net P&L</small><strong className={metrics.totalPnl >= 0 ? 'positive-text' : 'negative-text'}>{money(metrics.totalPnl)}</strong></span><span><small>ROI</small><strong>{pct(metrics.returnOnBankroll)}</strong></span><span><small>Brier</small><strong>{metrics.brier.toFixed(3)}</strong></span></div>
-            <div className="run-card-foot"><span>{metrics.betsPlaced} bets · {metrics.passes} pass</span><span>View ledger →</span></div>
+          return <button className="run-card panel" key={run.id} onClick={() => navigate(`/runs/${run.id}`)}>
+            <div className="run-card-head"><span className="reasoning-badge">{run.reasoningEffort || 'run'}</span><span className={`card-pnl ${metrics.totalPnl >= 0 ? 'positive-text' : 'negative-text'}`}>{money(metrics.totalPnl)}</span></div>
+            <h2>{run.model}</h2><p>{run.modelVersion || 'Version not specified'}</p>
+            <div className="run-card-metrics"><span><small>ROI</small><strong className={metrics.returnOnBankroll >= 0 ? 'positive-text' : 'negative-text'}>{pct(metrics.returnOnBankroll)}</strong></span><span><small>Hit</small><strong>{pctPlain(metrics.hitRate)}</strong></span><span><small>Brier</small><strong>{metrics.brier.toFixed(3)}</strong></span></div>
+            <div className="run-card-foot"><span>{metrics.betsPlaced} bets · {metrics.passes} pass</span><span className="go">Ledger →</span></div>
           </button>;
         })}
       </section>
@@ -213,56 +221,55 @@ function PublishedRuns({ runs, onOpen }: { runs: EvaluationRun[]; onOpen: (id: s
   );
 }
 
-function ModelsComparison({ runs, onOpen }: { runs: EvaluationRun[]; onOpen: (id: string) => void }) {
+function ModelsComparison({ runs }: { runs: EvaluationRun[] }) {
+  const { model: modelParam, reasoning: reasoningParam } = useParams();
+  const navigate = useNavigate();
   const families = useMemo(() => aggregateModelFamilies(runs, matches), [runs]);
-  const [selectedModel, setSelectedModel] = useState('');
-  const [selectedReasoning, setSelectedReasoning] = useState('');
 
-  const family: ModelFamilySummary | undefined = families.find((item) => item.model === selectedModel) ?? families[0];
-  const level = family?.reasoningLevels.find((item) => item.reasoningEffort === selectedReasoning) ?? family?.reasoningLevels[0];
+  const family: ModelFamilySummary | undefined = families.find((item) => item.model === modelParam) ?? families[0];
+  const level = family?.reasoningLevels.find((item) => item.reasoningEffort === reasoningParam) ?? family?.reasoningLevels[0];
   const levelRuns = family && level
-    ? runs
-      .filter((run) => run.model === family.model && (run.reasoningEffort?.trim() || 'unspecified') === level.reasoningEffort)
-      .sort((a, b) => (b.publishedAt ?? '').localeCompare(a.publishedAt ?? ''))
+    ? runs.filter((run) => run.model === family.model && (run.reasoningEffort?.trim() || 'unspecified') === level.reasoningEffort).sort((a, b) => (b.publishedAt ?? '').localeCompare(a.publishedAt ?? ''))
     : [];
 
-  const selectFamily = (model: string) => { setSelectedModel(model); setSelectedReasoning(''); };
-
   return (
-    <div className="page models-page">
-      <header className="page-header"><div><p className="eyebrow">MODEL COMPARISON</p><h1>Who turns the biggest profit?</h1><p>Rank models by average net P&L, then drill into each reasoning level and its runs.</p></div></header>
-      {!families.length ? <div className="catalogue-state"><strong>No models to compare yet</strong><span>Published runs will appear here automatically.</span></div> : <>
-        <section className="panel model-table-wrap"><table className="model-table"><thead><tr><th>Model</th><th>Reasoning levels</th><th>Runs</th><th>Bets</th><th>Avg. P&L</th><th>Avg. ROI</th><th>Brier</th><th>Best P&L</th></tr></thead><tbody>
-          {families.map((item, index) => <tr key={item.model} className={item.model === family?.model ? 'selected-model' : ''} onClick={() => selectFamily(item.model)}>
+    <div className="page">
+      <header className="page-header"><div><p className="eyebrow">Model comparison</p><h1>Who turns the biggest profit?</h1><p className="subhead">Rank models by average net P&L, then drill into each reasoning level and its runs.</p></div></header>
+      {!families.length ? <div className="empty-state"><strong>No models to compare yet</strong><span>Published runs will appear here automatically.</span></div> : <>
+        <section className="panel model-table-wrap"><table className="model-table"><thead><tr><th>Model</th><th>Levels</th><th>Runs</th><th>Bets</th><th>Avg. P&amp;L</th><th>Avg. ROI</th><th>Brier</th><th>Best P&amp;L</th></tr></thead><tbody>
+          {families.map((item, index) => <tr key={item.model} className={item.model === family?.model ? 'selected-model' : ''} onClick={() => navigate(`/models/${encodeURIComponent(item.model)}`)}>
             <td><span className="model-rank">{String(index + 1).padStart(2, '0')}</span><strong>{item.model}</strong></td>
-            <td><span className="reasoning-badge">{item.reasoningLevels.length} level{item.reasoningLevels.length === 1 ? '' : 's'}</span></td>
+            <td><span className="reasoning-badge">{item.reasoningLevels.length}</span></td>
             <td className="mono">{item.runs}</td><td className="mono">{item.betsPlaced}</td>
             <td className={`mono ${item.averagePnl >= 0 ? 'positive-text' : 'negative-text'}`}>{money(item.averagePnl)}</td>
             <td className={`mono ${item.averageRoi >= 0 ? 'positive-text' : 'negative-text'}`}>{pct(item.averageRoi)}</td>
-            <td className="mono">{item.averageBrier.toFixed(3)}</td><td className={`mono ${item.bestPnl >= 0 ? 'positive-text' : 'negative-text'}`}>{money(item.bestPnl)}</td>
+            <td className="mono muted-num">{item.averageBrier.toFixed(3)}</td><td className={`mono ${item.bestPnl >= 0 ? 'positive-text' : 'negative-text'}`}>{money(item.bestPnl)}</td>
           </tr>)}
         </tbody></table></section>
         {family && <section className="model-breakdown">
-          <div className="model-hero panel"><div><span className="eyebrow">SELECTED MODEL</span><h2>{family.model}</h2><p>{family.reasoningLevels.length} reasoning level{family.reasoningLevels.length === 1 ? '' : 's'} · {family.runs} run{family.runs === 1 ? '' : 's'} · {family.betsPlaced} bets placed</p></div><div className="condition-compare"><span><small>Average P&L</small><strong className={family.averagePnl >= 0 ? 'positive-text' : 'negative-text'}>{money(family.averagePnl)}</strong></span><i>vs</i><span><small>Best P&L</small><strong className={family.bestPnl >= 0 ? 'positive-text' : 'negative-text'}>{money(family.bestPnl)}</strong></span></div></div>
+          <div className="model-hero panel"><div><span className="eyebrow">Selected model</span><h2>{family.model}</h2><p>{family.reasoningLevels.length} reasoning level{family.reasoningLevels.length === 1 ? '' : 's'} · {family.runs} run{family.runs === 1 ? '' : 's'} · {family.betsPlaced} bets</p></div><div className="condition-compare"><span><small>Average P&amp;L</small><strong className={family.averagePnl >= 0 ? 'positive-text' : 'negative-text'}>{money(family.averagePnl)}</strong></span><i>best</i><span><small>Best run</small><strong className={family.bestPnl >= 0 ? 'positive-text' : 'negative-text'}>{money(family.bestPnl)}</strong></span></div></div>
           <div className="panel reasoning-panel">
             <PanelTitle title="Reasoning levels" detail="Select an effort setting to compare its runs" />
-            {family.reasoningLevels.map((item) => <button key={item.reasoningEffort} className={`reasoning-row ${item.reasoningEffort === level?.reasoningEffort ? 'selected' : ''}`} onClick={() => setSelectedReasoning(item.reasoningEffort)}>
-              <span className="reasoning-badge">{item.reasoningEffort}</span>
-              <span className="reasoning-meta"><small>{item.runs} run{item.runs === 1 ? '' : 's'}</small><small>Brier {item.averageBrier.toFixed(3)}</small></span>
-              <span className={`mono ${item.averagePnl >= 0 ? 'positive-text' : 'negative-text'}`}>{money(item.averagePnl)}</span>
-            </button>)}
+            <div className="reasoning-list">
+              {family.reasoningLevels.map((item) => <button key={item.reasoningEffort} className={`reasoning-row ${item.reasoningEffort === level?.reasoningEffort ? 'selected' : ''}`} onClick={() => navigate(`/models/${encodeURIComponent(family.model)}/${encodeURIComponent(item.reasoningEffort)}`)}>
+                <span className="reasoning-badge">{item.reasoningEffort}</span>
+                <span className="reasoning-meta"><small>{item.runs} run{item.runs === 1 ? '' : 's'}</small><small>Brier {item.averageBrier.toFixed(3)}</small></span>
+                <span className={`mono ${item.averagePnl >= 0 ? 'positive-text' : 'negative-text'}`}>{money(item.averagePnl)}</span>
+              </button>)}
+            </div>
           </div>
         </section>}
-        {family && level && <section className="panel model-run-list model-run-list-full">
+        {family && level && <section className="panel model-run-list">
           <PanelTitle title="Run history" detail={`${family.model} · ${level.reasoningEffort} reasoning`} />
-          {levelRuns.map((run) => { const metrics = evaluateRun(run, matches); return <button key={run.id} onClick={() => onOpen(run.id)}><span><strong>{run.modelVersion || run.model}</strong><small>{metrics.betsPlaced} bets · {pct(metrics.hitRate)} hit · {run.publisher ? `${run.publisher}` : 'CLI'}</small></span><span className="mono">{pct(metrics.returnOnBankroll)}</span><span className={`mono ${metrics.totalPnl >= 0 ? 'positive-text' : 'negative-text'}`}>{money(metrics.totalPnl)}</span><b>→</b></button>; })}
+          {levelRuns.map((run) => { const metrics = evaluateRun(run, matches); return <button key={run.id} onClick={() => navigate(`/runs/${run.id}`)}><span><strong>{run.modelVersion || run.model}</strong><small>{metrics.betsPlaced} bets · {pctPlain(metrics.hitRate)} hit · {run.publisher || 'CLI'}</small></span><span className={`mono ${metrics.returnOnBankroll >= 0 ? 'positive-text' : 'negative-text'}`}>{pct(metrics.returnOnBankroll)}</span><span className={`mono ${metrics.totalPnl >= 0 ? 'positive-text' : 'negative-text'}`}>{money(metrics.totalPnl)}</span><b>→</b></button>; })}
         </section>}
       </>}
     </div>
   );
 }
 
-function RunBuilder({ onSave, onCancel }: { onSave: (run: EvaluationRun) => void; onCancel: () => void }) {
+function RunBuilder({ onSave }: { onSave: (run: EvaluationRun) => void }) {
+  const navigate = useNavigate();
   const [model, setModel] = useState('');
   const [modelVersion, setModelVersion] = useState('');
   const [reasoningEffort, setReasoningEffort] = useState('');
@@ -270,15 +277,13 @@ function RunBuilder({ onSave, onCancel }: { onSave: (run: EvaluationRun) => void
   const [notes, setNotes] = useState('');
   const [jsonInput, setJsonInput] = useState('');
   const [preview, setPreview] = useState<RunMetrics | null>(null);
-  const [wagerCount, setWagerCount] = useState(0);
-  const [error, setError] = useState('');
   const [imported, setImported] = useState<ReturnType<typeof validateWagers> | null>(null);
+  const [error, setError] = useState('');
 
   const importJson = () => {
     try {
       const wagers = validateWagers(JSON.parse(jsonInput), matches);
       setImported(wagers);
-      setWagerCount(wagers.length);
       setPreview(evaluateRun({ id: 'preview', model: 'preview', createdAt: '', wagers }, matches));
       setError('');
     } catch (cause) {
@@ -290,18 +295,20 @@ function RunBuilder({ onSave, onCancel }: { onSave: (run: EvaluationRun) => void
   const save = () => {
     if (!model.trim()) return setError('Give this model or run a name.');
     if (!imported || !imported.length) return setError('Import a valid wager array first.');
+    const id = crypto.randomUUID();
     onSave({
-      id: crypto.randomUUID(), model: model.trim(), createdAt: new Date().toISOString(), wagers: imported,
+      id, model: model.trim(), createdAt: new Date().toISOString(), wagers: imported,
       notes: notes.trim() || undefined,
       modelVersion: modelVersion.trim() || undefined,
       reasoningEffort: reasoningEffort.trim() || undefined,
       promptVersion: promptVersion.trim() || undefined,
     });
+    navigate(`/runs/${id}`);
   };
 
   return (
-    <div className="page builder-page">
-      <header className="page-header"><div><p className="eyebrow">NEW EVALUATION</p><h1>Load model wagers</h1><p>Paste the JSON array your model returned from the Prompt lab pack.</p></div><button className="text-button" onClick={onCancel}>← Back to results</button></header>
+    <div className="page">
+      <header className="page-header"><div><p className="eyebrow">New evaluation</p><h1>Load model wagers</h1><p className="subhead">Paste the JSON array your model returned from the Prompt lab pack.</p></div><button className="text-button" onClick={() => navigate(-1)}>← Back</button></header>
       <section className="panel setup-panel">
         <div className="form-grid">
           <label><span>Model family</span><input value={model} onChange={(event) => setModel(event.target.value)} placeholder="e.g. GPT-5" /></label>
@@ -312,15 +319,15 @@ function RunBuilder({ onSave, onCancel }: { onSave: (run: EvaluationRun) => void
         </div>
       </section>
       <section className="panel import-panel">
-        <PanelTitle title="Wager import" detail='Expected: [{"matchId":"2026-A-01","bet":"A","stake":6.5,"probs":{"H":0.3,"D":0.28,"A":0.42}}]' />
+        <PanelTitle title="Wager import" detail='[{"matchId":"2026-A-01","bet":"A","stake":6.5,"probs":{"H":0.3,"D":0.28,"A":0.42}}]' />
         <textarea value={jsonInput} onChange={(event) => setJsonInput(event.target.value)} placeholder="Paste the model's JSON array here…" />
-        <div className="import-actions"><button className="secondary" onClick={importJson}>Import & score</button><span>{wagerCount ? `${wagerCount} wagers loaded` : 'Importing scores the run instantly.'}</span></div>
+        <div className="import-actions"><button className="secondary" onClick={importJson}>Import &amp; score</button><span>{imported ? `${imported.length} wagers loaded` : 'Scoring runs the moment you import.'}</span></div>
       </section>
       {preview && (
         <section className="metric-grid">
-          <Metric label="Net profit" value={money(preview.totalPnl)} note={`bankroll ${gbp(preview.finalBankroll)}`} tone={preview.totalPnl >= 0 ? 'positive' : 'negative'} />
+          <Metric label="Net profit" value={money(preview.totalPnl)} note={`bankroll ${gbp(preview.finalBankroll)}`} tone={preview.totalPnl >= 0 ? 'positive' : 'negative'} hero />
           <Metric label="Return on bankroll" value={pct(preview.returnOnBankroll)} note={`£${preview.totalStaked.toFixed(0)} of £${STARTING_BANKROLL} staked`} tone={preview.returnOnBankroll >= 0 ? 'positive' : 'negative'} />
-          <Metric label="Hit rate" value={pct(preview.hitRate)} note={`${preview.betsPlaced} bets · ${preview.passes} pass`} />
+          <Metric label="Hit rate" value={pctPlain(preview.hitRate)} note={`${preview.betsPlaced} bets · ${preview.passes} pass`} />
           <Metric label="Brier score" value={preview.brier.toFixed(3)} note="lower is better" />
         </section>
       )}
@@ -339,19 +346,19 @@ function PromptLab() {
     const anchor = document.createElement('a'); anchor.href = url; anchor.download = 'world-cup-2026-profit-prompt.txt'; anchor.click(); URL.revokeObjectURL(url);
   };
   return (
-    <div className="page prompt-page">
-      <header className="page-header"><div><p className="eyebrow">PROMPT LAB</p><h1>Run the profit challenge</h1><p>A result-free pack that asks a model to maximise profit, not accuracy.</p></div></header>
+    <div className="page">
+      <header className="page-header"><div><p className="eyebrow">Prompt lab</p><h1>Run the profit challenge</h1><p className="subhead">A result-free pack that asks a model to maximise profit, not accuracy.</p></div></header>
       <section className="prompt-layout">
         <div className="panel prompt-controls">
-          <h2>The challenge</h2>
+          <h2>The rules</h2>
           <ul className="challenge-list">
             <li>Deploy the full £{STARTING_BANKROLL} bankroll — stakes must sum to £{STARTING_BANKROLL}, max £{MAX_STAKE} per match.</li>
-            <li>Back Home / Draw / Away, or PASS (£0) on the rest.</li>
-            <li>Winning bets settle at the best of four closing prices (line shopping).</li>
-            <li>Only value bets win long term — the model must estimate its own probabilities.</li>
+            <li>Back Home, Draw, Away, or PASS (£0) on the rest.</li>
+            <li>Winners settle at the best of four closing prices (line shopping).</li>
+            <li>Only value bets win — the model estimates its own probabilities.</li>
           </ul>
           <div className="guardrail"><strong>Leakage guard</strong><p>Fixtures include odds only — never scores or results. The prompt forbids browsing, search, retrieval, and tool use.</p></div>
-          <div className="knowledge-warning"><strong>Knowledge-cutoff warning</strong><p>Use a model snapshot with a knowledge cutoff before 11 June 2026 and disable all tools at the API level, or results already in training data will leak.</p></div>
+          <div className="knowledge-warning"><strong>Knowledge-cutoff warning</strong><p>Use a model snapshot with a cutoff before 11 June 2026 and disable all tools at the API level, or results in training data will leak.</p></div>
           <button className="primary full" onClick={copy}>{copied ? 'Copied ✓' : 'Copy prompt'}</button>
           <button className="secondary full" onClick={download}>Download .txt</button>
         </div>
@@ -366,25 +373,21 @@ function outcomeName(outcome: 'H' | 'D' | 'A', match: Match) {
   return outcome === 'H' ? `${match.homeTeam} win` : `${match.awayTeam} win`;
 }
 
-function Metric({ label, value, note, tone }: { label: string; value: string; note: string; tone?: 'positive' | 'negative' }) {
-  return <div className="metric-card"><span>{label}</span><strong className={tone === 'positive' ? 'positive-text' : tone === 'negative' ? 'negative-text' : ''}>{value}</strong><small>{note}</small></div>;
+function Metric({ label, value, note, tone, hero }: { label: string; value: string; note: string; tone?: 'positive' | 'negative'; hero?: boolean }) {
+  return <div className={`metric-card ${hero ? 'hero' : ''} ${tone ?? ''}`}><span>{label}</span><strong>{value}</strong><small>{note}</small></div>;
 }
 
 function PanelTitle({ title, detail }: { title: string; detail: string }) {
   return <div className="panel-title"><h2>{title}</h2><p>{detail}</p></div>;
 }
 
-function BankrollPill({ value }: { value: number }) {
-  return <span className={`odds-pill ${value >= STARTING_BANKROLL ? '' : 'pill-down'}`}>◉ {gbp(value)}</span>;
-}
-
 function BetTag({ bet, won, placed, isValue }: { bet: Bet; won: boolean; placed: boolean; isValue: boolean }) {
-  if (!placed) return <span className="result-tag pass"><b>—</b>Pass</span>;
-  return <span className={`result-tag ${won ? 'correct' : 'wrong'}`}><b>{bet}</b>{BET_LABELS[bet]}{isValue && <i className="value-dot" title="Model judged this +EV">◆</i>}</span>;
+  if (!placed) return <span className="bet-tag pass"><b>—</b>Pass</span>;
+  return <span className={`bet-tag ${won ? 'won' : 'lost'}`}><b>{bet}</b>{BET_LABELS[bet]}{isValue && <i className="value-dot" title="Model judged this +EV">◆</i>}</span>;
 }
 
 function ProfitChart({ metrics }: { metrics: RunMetrics }) {
-  const width = 760, height = 230, pad = 24;
+  const width = 760, height = 230, pad = 26;
   const points = [{ x: 0, y: 0 }, ...metrics.settled.map((row, index) => ({ x: index + 1, y: row.cumulativePnl }))];
   const values = points.map((point) => point.y);
   const min = Math.min(...values, -1), max = Math.max(...values, 1);
@@ -392,14 +395,18 @@ function ProfitChart({ metrics }: { metrics: RunMetrics }) {
   const y = (value: number) => pad + (max - value) / (max - min) * (height - pad * 2);
   const path = points.map((point, index) => `${index ? 'L' : 'M'} ${x(point.x)} ${y(point.y)}`).join(' ');
   const area = `${path} L ${x(metrics.matches)} ${height - pad} L ${pad} ${height - pad} Z`;
+  const up = metrics.totalPnl >= 0;
   return (
     <div className="profit-chart">
-      <svg viewBox={`0 0 ${width} ${height}`} role="img" aria-label="Cumulative profit chart">
+      <svg viewBox={`0 0 ${width} ${height}`} role="img" aria-label="Cumulative profit chart" preserveAspectRatio="none">
         {[0, .25, .5, .75, 1].map((part) => <line key={part} x1={pad} x2={width - pad} y1={pad + part * (height - pad * 2)} y2={pad + part * (height - pad * 2)} className="grid-line" />)}
         <line x1={pad} x2={width - pad} y1={y(0)} y2={y(0)} className="zero-line" />
-        <defs><linearGradient id="area" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#8dffb5" stopOpacity=".3" /><stop offset="1" stopColor="#8dffb5" stopOpacity="0" /></linearGradient></defs>
-        <path d={area} fill="url(#area)" /><path d={path} className="profit-line" />
-        {points.length > 1 && <circle cx={x(points.at(-1)!.x)} cy={y(points.at(-1)!.y)} r="5" className="last-dot" />}
+        <defs>
+          <linearGradient id="area-up" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="var(--profit)" stopOpacity=".26" /><stop offset="1" stopColor="var(--profit)" stopOpacity="0" /></linearGradient>
+          <linearGradient id="area-down" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="var(--loss)" stopOpacity=".22" /><stop offset="1" stopColor="var(--loss)" stopOpacity="0" /></linearGradient>
+        </defs>
+        <path d={area} fill={`url(#area-${up ? 'up' : 'down'})`} /><path d={path} className={`profit-line ${up ? 'up' : 'down'}`} />
+        {points.length > 1 && <circle cx={x(points.at(-1)!.x)} cy={y(points.at(-1)!.y)} r="4.5" className={`last-dot ${up ? 'up' : 'down'}`} />}
       </svg>
       <div className="chart-axis"><span>Match 1</span><span>{metrics.matches ? `Match ${metrics.matches}` : 'No picks'}</span></div>
     </div>

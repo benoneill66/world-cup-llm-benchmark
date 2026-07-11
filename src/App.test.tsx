@@ -27,27 +27,27 @@ describe('profit benchmark dashboard', () => {
   it('renders the flat-favourite baseline and wager ledger', () => {
     render(<App />);
     expect(screen.getByRole('heading', { name: 'Flat-favourite baseline' })).toBeTruthy();
-    expect(screen.getByText('This is not an LLM result')).toBeTruthy();
+    expect(screen.getByText(/spreads the £100 evenly/i)).toBeTruthy();
     expect(screen.getByText('Net profit')).toBeTruthy();
     expect(screen.getByRole('heading', { name: 'Wager ledger' })).toBeTruthy();
   });
 
   it('exposes the profit prompt and wager importer', () => {
     render(<App />);
-    fireEvent.click(screen.getByRole('button', { name: /Prompt lab/i }));
+    fireEvent.click(screen.getByRole('link', { name: /Prompt lab/i }));
     expect(screen.getByRole('heading', { name: 'Run the profit challenge' })).toBeTruthy();
     expect(screen.getByText('Leakage guard')).toBeTruthy();
 
-    fireEvent.click(screen.getByRole('button', { name: /New evaluation/i }));
+    fireEvent.click(screen.getByRole('link', { name: /New evaluation/i }));
     expect(screen.getByRole('heading', { name: 'Load model wagers' })).toBeTruthy();
-    expect(screen.getByRole('button', { name: 'Import & score' })).toBeTruthy();
+    expect(screen.getByRole('button', { name: /Import & score/i })).toBeTruthy();
   });
 
   it('provides published-run browsing and model drill-down screens', () => {
     render(<App />);
-    fireEvent.click(screen.getByRole('button', { name: /Published runs/i }));
+    fireEvent.click(screen.getByRole('link', { name: /Published runs/i }));
     expect(screen.getByRole('heading', { name: 'Published runs' })).toBeTruthy();
-    fireEvent.click(screen.getByRole('button', { name: /^≋ Models$/i }));
+    fireEvent.click(screen.getByRole('link', { name: /^▸ Models$/i }));
     expect(screen.getByRole('heading', { name: 'Who turns the biggest profit?' })).toBeTruthy();
   });
 
