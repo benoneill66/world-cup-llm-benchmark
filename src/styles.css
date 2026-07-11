@@ -37,6 +37,7 @@ body {
 button, input, select, textarea { font: inherit; }
 button { cursor: pointer; }
 a { color: inherit; text-decoration: none; }
+:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; border-radius: 6px; }
 .mono { font-family: 'JetBrains Mono', monospace; font-variant-numeric: tabular-nums; }
 .positive-text { color: var(--profit) !important; }
 .negative-text { color: var(--loss) !important; }
@@ -65,6 +66,7 @@ nav a {
   color: var(--muted); font-weight: 600; font-size: 13.5px; transition: background .15s, color .15s;
 }
 nav a span { width: 14px; text-align: center; color: var(--faint); font-size: 12px; transition: color .15s; }
+nav a em { font-style: normal; }
 nav a:hover { color: var(--ink); background: var(--panel-2); }
 nav a.active { color: var(--ink); background: var(--raise); box-shadow: inset 2px 0 0 var(--gold); }
 nav a.active span { color: var(--gold); }
@@ -272,20 +274,25 @@ tbody tr:hover td { background: rgba(255, 255, 255, .012); }
 @media (max-width: 1080px) {
   .app-shell { grid-template-columns: 72px 1fr; }
   .sidebar { padding: 22px 10px; }
-  .brand span, .brand strong, nav a span + *, .sidebar-note { display: none; }
+  .brand span, .brand strong, nav a em, .sidebar-note { display: none; }
   .brand { justify-content: center; padding: 4px 0 24px; }
-  nav a { justify-content: center; font-size: 0; padding: 12px; }
-  nav a span { font-size: 15px; width: auto; }
+  nav a { justify-content: center; padding: 12px; }
+  nav a span { font-size: 16px; width: auto; }
   .page { padding: 32px 24px 80px; }
   .dashboard-grid, .model-breakdown, .prompt-layout { grid-template-columns: 1fr; }
   .run-card-grid { grid-template-columns: 1fr 1fr; }
 }
 @media (max-width: 720px) {
   .app-shell { display: block; }
-  .sidebar { position: fixed; z-index: 20; inset: auto 0 0 0; height: 60px; flex-direction: row; padding: 6px 10px; border-right: 0; border-top: 1px solid var(--line); }
+  .sidebar { position: fixed; z-index: 20; inset: auto 0 0 0; height: 62px; flex-direction: row; padding: 0; gap: 0; border-right: 0; border-top: 1px solid var(--line); background: rgba(9, 12, 19, .96); }
   .brand { display: none; }
-  nav { width: 100%; grid-template-columns: repeat(5, 1fr); gap: 2px; }
-  nav a { flex-direction: column; gap: 3px; padding: 6px; }
+  nav { width: 100%; grid-template-columns: repeat(5, 1fr); gap: 0; }
+  nav a { position: relative; flex-direction: column; gap: 3px; padding: 9px 2px 7px; border-radius: 0; }
+  nav a em { display: block; font-size: 8.5px; font-weight: 600; letter-spacing: .01em; white-space: nowrap; }
+  nav a span { font-size: 17px; }
+  nav a:hover { background: transparent; color: var(--ink); }
+  nav a.active { background: transparent; box-shadow: none; color: var(--gold); }
+  nav a.active::before { content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 24px; height: 2px; border-radius: 0 0 2px 2px; background: var(--gold); }
   .page { padding: 26px 16px 92px; }
   .page-header { flex-direction: column; align-items: flex-start; gap: 14px; }
   .metric-grid { grid-template-columns: 1fr 1fr; }

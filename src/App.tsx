@@ -74,11 +74,11 @@ function Layout({ children }: { children: React.ReactNode }) {
           <div><strong>TOUCHLINE</strong><span>Betting desk</span></div>
         </NavLink>
         <nav>
-          <NavLink to="/" end className={link}><span>▸</span> Run detail</NavLink>
-          <NavLink to="/published" className={link}><span>▸</span> Published runs</NavLink>
-          <NavLink to="/models" className={link}><span>▸</span> Models</NavLink>
-          <NavLink to="/new" className={link}><span>＋</span> New evaluation</NavLink>
-          <NavLink to="/prompt" className={link}><span>⌘</span> Prompt lab</NavLink>
+          <NavLink to="/" end className={link}><span>◉</span><em>Run detail</em></NavLink>
+          <NavLink to="/published" className={link}><span>▤</span><em>Published</em></NavLink>
+          <NavLink to="/models" className={link}><span>≣</span><em>Models</em></NavLink>
+          <NavLink to="/new" className={link}><span>＋</span><em>New run</em></NavLink>
+          <NavLink to="/prompt" className={link}><span>⌘</span><em>Prompt lab</em></NavLink>
         </nav>
         <div className="sidebar-note">
           <span className="note-tag">The challenge</span>

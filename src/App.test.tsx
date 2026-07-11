@@ -38,16 +38,16 @@ describe('profit benchmark dashboard', () => {
     expect(screen.getByRole('heading', { name: 'Run the profit challenge' })).toBeTruthy();
     expect(screen.getByText('Leakage guard')).toBeTruthy();
 
-    fireEvent.click(screen.getByRole('link', { name: /New evaluation/i }));
+    fireEvent.click(screen.getByRole('link', { name: /New run/i }));
     expect(screen.getByRole('heading', { name: 'Load model wagers' })).toBeTruthy();
     expect(screen.getByRole('button', { name: /Import & score/i })).toBeTruthy();
   });
 
   it('provides published-run browsing and model drill-down screens', () => {
     render(<App />);
-    fireEvent.click(screen.getByRole('link', { name: /Published runs/i }));
+    fireEvent.click(screen.getByRole('link', { name: /Published/i }));
     expect(screen.getByRole('heading', { name: 'Published runs' })).toBeTruthy();
-    fireEvent.click(screen.getByRole('link', { name: /^▸ Models$/i }));
+    fireEvent.click(screen.getByRole('link', { name: /Models/i }));
     expect(screen.getByRole('heading', { name: 'Who turns the biggest profit?' })).toBeTruthy();
   });
 
